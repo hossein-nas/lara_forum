@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Reply;
 use App\Channel;
 use App\Thread; use App\User; use Illuminate\Foundation\Testing\DatabaseMigrations; use Tests\TestCase;
 
@@ -75,6 +76,40 @@ class CreateThreadsTest extends TestCase
 
 		return $this->post('/threads', $thread->toArray());
 	}
+
+	/** @test */
+	public function a_thread_can_be_deleted()
+	{
+		$this->signIn();
+
+		$thread = create(Thread::class);
+		$reply = create(Reply::class, ['thread_id' => $thread->id]);
+
+		$response = $this->json('DELETE', $thread->path() );
+
+		$response->assertStatus(204);
+
+		$this->assertDatabaseMissing('threads', ['id' => $thread->id] );
+		$this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+	}
+
+	/** @test */
+	public function guests_cannot_delete_threads()
+	{
+		$this->withExceptionHandling();
+
+		$thread = create(Thread::class);
+		
+		$response = $this->delete($thread->path() );
+
+		$response->assertRedirect('/login');
+	}
 	
+	/** @test */
+	public function threads_may_only_be_deleted_by_those_who_have_permission()
+	{
+		// TODO:
+	}
 	
+
 }

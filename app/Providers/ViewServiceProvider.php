@@ -15,7 +15,10 @@ class ViewServiceProvider extends ServiceProvider
     public function boot()
     {
         \View::composer('*', function($view){
-            $view->with('channels', Channel::all() );
+            $channels = \Cache::rememberForever('channels', function(){
+                return Channel::all();
+            });
+            $view->with('channels', $channels );
         });
     }
 

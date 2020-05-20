@@ -12,5 +12,18 @@ class Activity extends Model
 	{
 		return $this->morphTo();	
 	}
-	
+
+	public static function feed(User $user=null, $take = 50)
+	{
+		if(!$user) $user = auth()->user();
+
+		return static::where('user_id', $user->id) 
+			->latest()
+			->with('subject')
+			->take($take)
+			->get()
+			->groupBy(function($activity){
+			return $activity->created_at->format('Y-m-d');
+		});
+	}
 }

@@ -13,26 +13,12 @@
 				
 				</div>
 				
-				@foreach( $threads as $thread )
-				
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<div class="level">
-								<div class="flex">
-									<a href="/profiles/{{ $profileUser->name }}">{{ $thread->creator->name }}</a> created :: 
-									<a href="{{ $thread->path() }}">{{ $thread->title }}</a>
-								</div>
-								
-								{{ $thread->created_at->diffForHumans() }}...
-							</div>
-						</div>
-						<div class="panel-body">
-							{{ $thread->body }}
-						</div>
-					</div>
-				
+				@foreach( $activities as  $date => $values)
+					<div class="text-center page-header">{{ Carbon\Carbon::parse($date)->format('jS \of F Y')}}</div >
+					@foreach($values as $activity)
+						@include("activities.{$activity->type}")
+					@endforeach
 				@endforeach
-				{{ $threads->links() }}
 			</div>
 		</div>
 	</div>	

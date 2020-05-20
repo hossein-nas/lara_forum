@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Reply;
 use App\Channel;
+use App\Activity;
 use App\Thread; use App\User; use Illuminate\Foundation\Testing\DatabaseMigrations; use Tests\TestCase;
 
 class CreateThreadsTest extends TestCase
@@ -84,13 +85,16 @@ class CreateThreadsTest extends TestCase
 
 		$thread = create(Thread::class, ['user_id' => auth()->id()]);
 		$reply = create(Reply::class, ['thread_id' => $thread->id]);
-
+		$reply->favorite();
+		
 		$response = $this->json('DELETE', $thread->path() );
 
 		$response->assertStatus(204);
 
 		$this->assertDatabaseMissing('threads', ['id' => $thread->id] );
 		$this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+		$this->assertEquals(0, Activity::count());
+
 	}
 
 	/** @test */
@@ -113,6 +117,5 @@ class CreateThreadsTest extends TestCase
 	{
 		// TODO:
 	}
-	
 
 }

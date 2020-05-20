@@ -5,6 +5,13 @@ namespace App;
 trait Favoritable
 {
 
+    public static function bootFavoritable()
+    {
+        static::deleting(function($model){
+            $model->favorites->each->delete();
+        });
+    }
+
     public function favorites()
     {
     	return $this->morphMany(Favorite::class, 'favorited');	

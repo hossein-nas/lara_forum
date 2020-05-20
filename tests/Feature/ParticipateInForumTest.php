@@ -46,5 +46,4 @@ class ParticipateInForumTest extends TestCase
 			->assertSessionHasErrors('body');
 	}
 	
-	
 }

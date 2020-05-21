@@ -16,7 +16,9 @@
 				@foreach( $activities as  $date => $values)
 					<div class="text-center page-header">{{ Carbon\Carbon::parse($date)->format('jS \of F Y')}}</div >
 					@foreach($values as $activity)
-						@include("activities.{$activity->type}")
+						@if( view()->exists("activities.{$activity->type}"))
+							@include("activities.{$activity->type}")
+						@endif
 					@endforeach
 				@endforeach
 			</div>

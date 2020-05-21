@@ -10,7 +10,7 @@
 					{{ $activity->subject->favorited->owner->name  }}
 				</a> 
 				In ::
-				<a href="{{ $activity->subject->favorited->thread->path()}}#reply-no-{{ $activity->subject->favorited->id }}">
+				<a href="{{ $activity->subject->favorited->first()->path() }}">
 					{{ $activity->subject->favorited->thread->title  }}
 				</a>
 			</span>	{{  $activity->created_at->diffForHumans() }}

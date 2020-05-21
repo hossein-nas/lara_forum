@@ -10,7 +10,7 @@
 					{{ $activity->subject->favorited->owner->name  }}
 				</a> 
 				In ::
-				<a href="{{ $activity->subject->favorited->first()->path() }}">
+				<a href="{{ $activity->subject->favorited->path() }}">
 					{{ $activity->subject->favorited->thread->title  }}
 				</a>
 			</span>	{{  $activity->created_at->diffForHumans() }}

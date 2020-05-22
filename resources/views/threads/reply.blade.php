@@ -44,13 +44,7 @@
         @can('update', $reply)
             <div class="panel-footer level" v-if="!editing">
                 <button class="btn btn-xs mr-1" @click="editing = !editing ">Edit</button>
-                <form action="/replies/{{ $reply->id }}" method="POST">
-                    {{  csrf_field() }}
-                    {{  method_field('DELETE') }}
-
-                    <button type="submit" class="btn btn-danger btn-xs">
-                        Delete reply
-                </form>
+                <button class="btn btn-danger btn-xs mr-1" @click="destroy">Delete</button>
             </div>
         @endcan
     </div>

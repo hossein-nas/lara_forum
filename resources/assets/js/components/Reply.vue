@@ -29,8 +29,14 @@ export default {
         postSubmit () {
             this.editing = false
             flash("Your Reply has been updated")
-        }
+        },
 
+        destroy () {
+            axios.delete("/replies/" + this.attributes.id)
+                .then(() => {
+                    $(this.$el).fadeOut(300, () => flash("Your reply has been deleted."))
+                })
+        }
     }
 
 }

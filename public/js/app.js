@@ -1989,6 +1989,15 @@ __webpack_require__.r(__webpack_exports__);
     postSubmit: function postSubmit() {
       this.editing = false;
       flash("Your Reply has been updated");
+    },
+    destroy: function destroy() {
+      var _this2 = this;
+
+      axios["delete"]("/replies/" + this.attributes.id).then(function () {
+        $(_this2.$el).fadeOut(300, function () {
+          return flash("Your reply has been deleted.");
+        });
+      });
     }
   }
 });

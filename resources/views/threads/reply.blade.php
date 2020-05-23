@@ -10,19 +10,7 @@
             	</span>
 
             	<div>
-            		@if(! $reply->isFavorited())
-    	        		<form method="POST" action="/replies/{{ $reply->id }}/favorites">
-    	        			{{ csrf_field() }}
-    	        			<button type="submit" class="btn btn-default">
-    	        				{{ $reply->favorites_count }} {{ str_plural('Favorite', $reply->favorites_count )}}
-    	        			</button>
-    	        		</form>
-
-    	        	@else
-            			<button type="submit" class="btn btn-default" disabled="disabled">
-            				 Favorited ({{ $reply->favorites_count }})
-            			</button>
-    	        	@endif
+                    <favorite :reply="{{ $reply }}"></favorite>
             	</div>
             </div>
         </div>

@@ -25,15 +25,32 @@ trait Favoritable
     		'user_id' => auth()->id()
     	]);
     }
-    
 
+    public function unfavorite()
+    {
+        $favorites= $this->favorites->where('user_id', auth()->id())->first();
+        if( $favorites->exists() ) {
+            $favorites->delete();
+        }
+    }
+    
     public function isFavorited()
     {
     	return  !! $this->favorites->where('user_id', auth()->id() )->count();
+    }
+
+    /*
+     * Function for :: getfavoritedByMeAttribute ::
+     *
+     */
+    public function getfavoritedByMeAttribute()
+    {
+        return $this->isFavorited();
     }
 
     public function getFavoritesCountAttribute()
     {
     	return $this->favorites->count();	
     }
+
 }

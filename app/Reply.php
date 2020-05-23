@@ -15,6 +15,7 @@ class Reply extends Model
 
 	protected $with = ['owner', 'favorites'];
 
+    protected $appends = ['favorites_count', 'favorited_by_me'];
 
     public function owner()
     {
@@ -30,7 +31,6 @@ class Reply extends Model
     {
         return "{$this->thread->path()}#reply-no-{$this->id}";
     }
-    
-    
+
 
 }

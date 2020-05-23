@@ -18,6 +18,21 @@ class FavoritesController extends Controller
 	{
 		$reply->favorite();
 
+		if( request()->expectsJson() ){
+			return response(['status' => "You've been favorited successfully." ]);
+		}
+		return back();
+	}
+
+	
+	public function destroy(Reply $reply)
+	{
+		$reply->unfavorite();	
+
+		if( request()->expectsJson() ){
+			return response(['status' => 'You unfavorited successfully']);
+		}
+
 		return back();
 	}
 	

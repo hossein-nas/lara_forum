@@ -21,6 +21,7 @@
         "vue/html-indent" : ["error", 4], 
         "indent" : ["error", 4],
         "quotes" : ["error", "double"],
+        "max-len": ["warn", { "code": 80, "ignoreComments": true }],
         "vue/html-closing-bracket-newline" : [
             "error", { "singleline" : "never", "multiline": "always"}
         ],

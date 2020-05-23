@@ -1,6 +1,12 @@
 <script>
+import Favorite from "./Favorite"
+
 export default {
     name: "Reply",
+
+    components: {
+        Favorite
+    },
 
     props: {
         attributes: {
@@ -34,7 +40,9 @@ export default {
         destroy () {
             axios.delete("/replies/" + this.attributes.id)
                 .then(() => {
-                    $(this.$el).fadeOut(300, () => flash("Your reply has been deleted."))
+                    $(this.$el).fadeOut(300,
+                        () => flash("Your reply has been deleted.")
+                    )
                 })
         }
     }

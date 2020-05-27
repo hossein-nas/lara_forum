@@ -13,14 +13,17 @@
 				
 				</div>
 				
-				@foreach( $activities as  $date => $values)
+				@forelse( $activities as  $date => $values)
 					<div class="text-center page-header">{{ Carbon\Carbon::parse($date)->format('jS \of F Y')}}</div >
 					@foreach($values as $activity)
 						@if( view()->exists("activities.{$activity->type}"))
 							@include("activities.{$activity->type}")
 						@endif
 					@endforeach
-				@endforeach
+
+				@empty
+					<p class="text-center">There is not activity for this user yet.</p>
+				@endforelse
 			</div>
 		</div>
 	</div>	

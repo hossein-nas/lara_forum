@@ -27,9 +27,7 @@ class FavoritesTest extends TestCase
 		$reply = create(Reply::class);
 
 		$this->post('/replies/' . $reply->id . "/favorites");
-
-		$this->assertCount(1, $reply->favorites);
-	}
+ $this->assertCount(1, $reply->favorites); }
 
 	/** @test */
 	public function an_authenticated_user_can_unfavorite_a_reply()
@@ -37,9 +35,11 @@ class FavoritesTest extends TestCase
 		$this->signIn();
 
 		$reply = create(Reply::class);
+		$reply2 = create(Reply::class);
 
 		$this->post('/replies/' . $reply->id . "/favorites");
 		$this->delete('/replies/' . $reply->id . "/favorites");
+		$this->delete('/replies/' . $reply2->id . "/favorites");
 
 		$this->assertCount(0, $reply->favorites);
 	}

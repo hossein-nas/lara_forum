@@ -22,6 +22,9 @@
         "indent" : ["error", 4],
         "quotes" : ["error", "double"],
         "max-len": ["warn", { "code": 80, "ignoreComments": true }],
+        "vue/html-self-closing" : "off",
+        "vue/valid-template-root" : "off",
+        "vue/require-prop-types" : "off",
         "vue/html-closing-bracket-newline" : [
             "error", { "singleline" : "never", "multiline": "always"}
         ],

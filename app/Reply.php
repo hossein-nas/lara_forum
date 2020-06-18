@@ -32,5 +32,4 @@ class Reply extends Model
         return "{$this->thread->path()}#reply-no-{$this->id}";
     }
 
-
 }

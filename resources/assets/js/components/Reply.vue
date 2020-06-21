@@ -4,7 +4,7 @@
             <div class="level">
                 <span class="flex">
                     <a :href="'/profiles/' + data.owner.name" v-text="data.owner.name">
-                    </a> said {{ data.created_at }}...
+                    </a> said <span v-text="ago"></span> ...
                 </span>
 
                 <div>
@@ -48,6 +48,7 @@
 </template>
 <script>
 import Favorite from "./Favorite"
+import moment from "moment"
 
 export default {
     name: "Reply",
@@ -72,6 +73,10 @@ export default {
     },
 
     computed: {
+        ago () {
+            return moment(this.data.created_at).fromNow()
+        },
+
         reply_id () {
             return ["reply-no-", this.data.id].join("")
         },

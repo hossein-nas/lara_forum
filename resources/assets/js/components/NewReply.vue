@@ -50,14 +50,13 @@ export default {
         addReply () {
             axios.post(this.endpoint, {
                 body: this.data
+            }).then(response => {
+                this.data = ""
+
+                flash("Your reply has been posted.")
+
+                this.$emit("created", response.data)
             })
-                .then(response => {
-                    this.data = ""
-
-                    flash("Your reply has been posted.")
-
-                    this.$emit("created", response.data)
-                })
         }
     }
 

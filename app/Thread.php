@@ -4,6 +4,7 @@ namespace App;
 
 use App\User;
 use App\RecordsActivity;
+use App\ThreadSubscription;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
@@ -65,5 +66,29 @@ class Thread extends Model
     {
         return $filters->apply($query);
     }
+
+    public function subscribe($userId = null)
+    {
+        $this->subscriptions()->create([
+            'user_id' => $userId ?: auth()->id()
+        ]);
+    }
+
+    /*
+     * Function for :: unsubscribe ::
+     *
+     */
+    public function unsubscribe($userId = null)
+    {
+        $this->subscriptions()
+            ->where('user_id', $userId ?: auth()->id())
+            ->delete();
+    }
     
+    
+    public function subscriptions()
+    {
+        return $this->hasMany(ThreadSubscription::class);    
+    }
+
 }

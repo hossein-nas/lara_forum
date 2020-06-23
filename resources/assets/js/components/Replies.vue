@@ -46,6 +46,8 @@ export default {
         refresh ({ data }) {
             this.dataSet = data
             this.items = data.data
+
+            window.scrollTo(0, 0)
         },
 
         url (page) {
@@ -55,10 +57,6 @@ export default {
                 page = query ? query[1] : 1
             }
             return `${location.pathname}/replies?page=${page}`
-        },
-
-        updateUrl (page) {
-            history.pushState(null, null, "?page=" + page)
         }
 
     }

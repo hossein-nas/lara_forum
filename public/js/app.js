@@ -2221,6 +2221,7 @@ __webpack_require__.r(__webpack_exports__);
       var data = _ref.data;
       this.dataSet = data;
       this.items = data.data;
+      window.scrollTo(0, 0);
     },
     url: function url(page) {
       if (!page) {
@@ -2229,9 +2230,6 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return "".concat(location.pathname, "/replies?page=").concat(page);
-    },
-    updateUrl: function updateUrl(page) {
-      history.pushState(null, null, "?page=" + page);
     }
   }
 });

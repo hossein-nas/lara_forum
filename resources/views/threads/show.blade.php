@@ -34,19 +34,6 @@
                             
                     </replies>
 
-{{--                     @if( auth()->check() ) 
-                        <form action="{{ $thread->path() . '/replies' }}" method="POST" >
-                            {{ csrf_field() }}
-                            <div class="form-group">
-                                <textarea name="body" id="body" cols="30" rows="5" class="form-control" placeholder="Have something to say?"></textarea>
-                            </div>
-                            <button class="btn btn-default" type="submit">POST</button>
-                            
-                        </form>
-                    @else
-                        <p class="text-center">Please <a href="{{ route('login') }}">sign in</a> to participate in this dicussion.</p>
-                    @endif
- --}}        
                 </div>
         
                 <div class="col-md-4">
@@ -56,7 +43,12 @@
                             This thread was published <strong>{{ $thread->created_at->diffForHumans()}}  </strong> <br/>
                             <strong>By :</strong> <a href="/user/JohnDoe">{{ $thread->creator->name }}</a> <br/>
                             Currently has <strong v-text="repliesCount"></strong>
+                            
+                            <div>
+                                <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>

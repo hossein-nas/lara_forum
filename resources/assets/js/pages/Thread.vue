@@ -1,11 +1,13 @@
 <script>
 import replies from "../components/Replies.vue"
+import SubscribeButton from "../components/SubscribeButton.vue"
 
 export default {
     name: "Thread",
 
     components: {
-        replies
+        replies,
+        SubscribeButton
     },
 
     props: ["initialRepliesCount"],

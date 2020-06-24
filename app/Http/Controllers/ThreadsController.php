@@ -82,9 +82,7 @@ class ThreadsController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Thread  $thread
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Thread $thread)
+     * @return \Illuminate\Http\Response / public function edit(Thread $thread)
     {
         //
     }

@@ -38,3 +38,6 @@ Route::delete('/replies/{reply}', 'RepliesController@destory');
 Route::patch('/replies/{reply}', 'RepliesController@update');
 
 Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
+
+Route::delete('profiles/{user}/notifications/{notification}', 'UsersNotificationsController@destroy');
+Route::get('profiles/{user}/notifications/', 'UsersNotificationsController@index');

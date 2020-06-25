@@ -36,7 +36,7 @@ class NotificationsTest extends TestCase {use DatabaseMigrations; public functio
 
         $response = $this->getJson("/profiles/{$user->name}/notifications")->json();
 
-        $this->assertCoun
+        // $this->assertCoun
     }
     
 

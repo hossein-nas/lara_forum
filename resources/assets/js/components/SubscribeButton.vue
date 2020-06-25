@@ -47,7 +47,7 @@ export default {
         subscribed ({ data }) {
             this.activeState = !this.activeState
 
-            if (this.actionType == "post") {
+            if (this.actionType !== "post") {
                 flash("Subscribed")
             } else {
                 flash("Unsubscribed")

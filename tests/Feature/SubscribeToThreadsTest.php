@@ -24,31 +24,46 @@ class SubscribeToThreadsTest extends TestCase
     }
     
     /** @test */
-        public function it_knows_if_the_authenticated_user_is_subscribed_to_it()
-        {
-            $this->signIn();
-            $thread = create(Thread::class);
+    public function it_knows_if_the_authenticated_user_is_subscribed_to_it()
+    {
+        $this->signIn();
+        $thread = create(Thread::class);
 
-            $this->assertFalse($thread->isSubscribedTo);
+        $this->assertFalse($thread->isSubscribedTo);
 
-            $thread->subscribe();
+        $thread->subscribe();
 
-            $this->assertTrue($thread->isSubscribedTo);
-        }
+        $this->assertTrue($thread->isSubscribedTo);
+    }
 
-        /** @test */
-        public function a_user_can_unsubscribe_from_threads()
-        {
-            $this->signIn();
-            $thread = create(Thread::class);
+    /** @test */
+    public function a_user_can_unsubscribe_from_threads()
+    {
+        $this->signIn();
+        $thread = create(Thread::class);
 
-            $thread->subscribe();
+        $thread->subscribe();
 
-            $this->assertCount(1, $thread->subscriptions);
+        $this->assertCount(1, $thread->subscriptions);
 
-            $this->delete($thread->path() . '/subscriptions');
+        $this->delete($thread->path() . '/subscriptions');
 
-            $this->assertCount(0, $thread->fresh()->subscriptions);
-        }
+        $this->assertCount(0, $thread->fresh()->subscriptions);
+    }
+
+    /** @test */
+    public function a_thread_can_check_if_authenticate_user_has_read_all_replies()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class); 
+
+        $this->assertTrue($thread->hasUpdatesFor(auth()->user()));
+
+        auth()->user()->read($thread);
+
+        $this->assertFalse($thread->hasUpdatesFor(auth()->user()));
+    }
+    
 
 }

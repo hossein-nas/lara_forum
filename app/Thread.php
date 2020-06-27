@@ -5,6 +5,7 @@ namespace App;
 use App\User;
 use App\Reply;
 use App\Thread;
+use Carbon\Carbon;
 use App\RecordsActivity;
 use App\ThreadSubscription;
 use App\Events\ThreadHasNewReply;
@@ -119,6 +120,14 @@ class Thread extends Model
         return $this->subscriptions()
             ->where('user_id', auth()->id())
             ->exists();
+    }
+
+    public function hasUpdatesFor($user = null)
+    {
+        $user = $user ?: auth()->user();
+        $key = $user->visitedThreadCacheKey($this);
+
+        return $this->updated_at > cache($key);
     }
 
 }

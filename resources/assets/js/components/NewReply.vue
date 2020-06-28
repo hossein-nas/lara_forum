@@ -12,7 +12,10 @@
                           placeholder="Have something to say?"
                 ></textarea>
             </div>
-            <button class="btn btn-default" type="submit" @click="addReply">
+            <button class="btn btn-default"
+                    type="submit"
+                    @click="addReply"
+            >
                 POST
             </button>
         </div>
@@ -50,13 +53,17 @@ export default {
         addReply () {
             axios.post(this.endpoint, {
                 body: this.data
-            }).then(response => {
-                this.data = ""
-
-                flash("Your reply has been posted.")
-
-                this.$emit("created", response.data)
             })
+                .then(response => {
+                    this.data = ""
+
+                    flash("Your reply has been posted.")
+
+                    this.$emit("created", response.data)
+                })
+                .catch(({ response }) => {
+                    flash(response.data, "danger")
+                })
         }
     }
 

@@ -1,6 +1,9 @@
 <template>
-    <div v-show="show" class="alert alert-success">
-        <strong>Success !</strong> {{ body }}
+    <div v-show="show"
+         class="alert alert-flash"
+         :class="'alert-' + level"
+    >
+        <strong>{{ firstMessage }}!</strong> {{ body }}
     </div>
 </template>
 
@@ -15,21 +18,29 @@ export default {
     data () {
         return {
             body: "",
+            level: "success",
             show: false
+        }
+    },
+
+    computed: {
+        firstMessage () {
+            return this.level.charAt(0).toUpperCase() + this.level.slice(1)
         }
     },
 
     created () {
         if (this.message) this.flash(this.message)
 
-        window.events.$on("flash", (message) => {
-            this.flash(message)
+        window.events.$on("flash", (data) => {
+            this.flash(data)
         })
     },
 
     methods: {
-        flash (message) {
-            this.body = message
+        flash (data) {
+            this.body = data.message
+            this.level = data.level
             this.show = true
 
             this.hide()

@@ -1992,6 +1992,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     message: {
@@ -2002,20 +2005,27 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       body: "",
+      level: "success",
       show: false
     };
+  },
+  computed: {
+    firstMessage: function firstMessage() {
+      return this.level.charAt(0).toUpperCase() + this.level.slice(1);
+    }
   },
   created: function created() {
     var _this = this;
 
     if (this.message) this.flash(this.message);
-    window.events.$on("flash", function (message) {
-      _this.flash(message);
+    window.events.$on("flash", function (data) {
+      _this.flash(data);
     });
   },
   methods: {
-    flash: function flash(message) {
-      this.body = message;
+    flash: function flash(data) {
+      this.body = data.message;
+      this.level = data.level;
       this.show = true;
       this.hide();
     },
@@ -2040,6 +2050,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -2092,6 +2105,9 @@ __webpack_require__.r(__webpack_exports__);
         flash("Your reply has been posted.");
 
         _this.$emit("created", response.data);
+      })["catch"](function (_ref) {
+        var response = _ref.response;
+        flash(response.data, "danger");
       });
     }
   }
@@ -2342,6 +2358,8 @@ __webpack_require__.r(__webpack_exports__);
         body: this.body
       }).then(function () {
         _this2.postSubmit();
+      })["catch"](function (error) {
+        flash(error.response.data, "danger");
       });
     },
     postSubmit: function postSubmit() {
@@ -38355,9 +38373,13 @@ var render = function() {
       directives: [
         { name: "show", rawName: "v-show", value: _vm.show, expression: "show" }
       ],
-      staticClass: "alert alert-success"
+      staticClass: "alert alert-flash",
+      class: "alert-" + _vm.level
     },
-    [_c("strong", [_vm._v("Success !")]), _vm._v(" " + _vm._s(_vm.body) + "\n")]
+    [
+      _c("strong", [_vm._v(_vm._s(_vm.firstMessage) + "!")]),
+      _vm._v(" " + _vm._s(_vm.body) + "\n")
+    ]
   )
 }
 var staticRenderFns = []
@@ -51017,7 +51039,11 @@ window.axios.defaults.headers.common = {
 window.events = new Vue();
 
 window.flash = function (message) {
-  window.events.$emit("flash", message);
+  var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "success";
+  window.events.$emit("flash", {
+    message: message,
+    level: level
+  });
 };
 
 /***/ }),

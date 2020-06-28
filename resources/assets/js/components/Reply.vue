@@ -98,6 +98,9 @@ export default {
                 .then(() => {
                     this.postSubmit()
                 })
+                .catch(error => {
+                    flash(error.response.data, "danger")
+                })
         },
 
         postSubmit () {

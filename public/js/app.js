@@ -5138,7 +5138,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.alert{\n    position: fixed;\n    bottom: 25px;\n    right: 25px;\n}\n", ""]);
+exports.push([module.i, "\n.alert-flash{\n    position: fixed;\n    bottom: 25px;\n    right: 25px;\n}\n", ""]);
 
 // exports
 

@@ -56,7 +56,7 @@ export default {
 </script>
 
 <style>
-.alert{
+.alert-flash{
     position: fixed;
     bottom: 25px;
     right: 25px;

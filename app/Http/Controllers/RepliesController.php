@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Reply;
-use App\Thread;
 use Exception;
+use App\Thread;
 
 class RepliesController extends Controller
 {
@@ -19,10 +19,10 @@ class RepliesController extends Controller
 		return $thread->replies()->paginate(5);			
 	}
 
-	public function store($channelId, Thread $thread, Spam $spam)
+	public function store($channelId, Thread $thread)
 	{
-
 		try{
+			$this->authorize('create', new Reply);
 			$this->validate(request(), ['body' => 'required|spamfree']);
 
 			$reply = $thread->addReply([

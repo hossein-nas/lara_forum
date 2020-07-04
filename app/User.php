@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Reply;
 use App\Thread;
 use App\Activity;
 use Carbon\Carbon;
@@ -55,5 +56,9 @@ class User extends Authenticatable
         $key = $this->visitedThreadCacheKey($thread);
         cache()->forever($key, Carbon::now());
     }
-    
+
+    public function lastReply()
+    {
+        return $this->hasOne(Reply::class)->latest();
+    }
 }

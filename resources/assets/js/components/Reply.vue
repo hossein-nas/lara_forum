@@ -15,21 +15,27 @@
 
         <div class="panel-body">
             <div v-if="editing">
-                <div class="form-group">
-                    <textarea id="reply-body"
-                              v-model="body"
-                              class="form-control"
-                              name="reply-body"
-                    > </textarea>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary btn-xs" @click="submitUpdate">
-                        Update
-                    </button>
-                    <button class="btn btn-link btn-xs" @click="editing = false">
-                        Cancel
-                    </button>
-                </div>
+                <form @submit.prevent="submitUpdate">
+                    <div class="form-group">
+                        <textarea id="reply-body"
+                                  v-model="body"
+                                  required
+                                  class="form-control"
+                                  name="reply-body"
+                        > </textarea>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-xs" type="submit">
+                            Update
+                        </button>
+                        <button type="button"
+                                class="btn btn-link btn-xs"
+                                @click="editing = false"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </form>
             </div>
             <div v-else>
                 {{ body }}
@@ -105,7 +111,7 @@ export default {
 
         postSubmit () {
             this.editing = false
-            // flash("Your Reply has been updated")
+            flash("Your Reply has been updated")
         },
 
         destroy () {

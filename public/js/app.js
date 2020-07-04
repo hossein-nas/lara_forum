@@ -2312,6 +2312,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2363,7 +2369,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     postSubmit: function postSubmit() {
-      this.editing = false; // flash("Your Reply has been updated")
+      this.editing = false;
+      flash("Your Reply has been updated");
     },
     destroy: function destroy() {
       var _this3 = this;
@@ -38653,53 +38660,79 @@ var render = function() {
       _c("div", { staticClass: "panel-body" }, [
         _vm.editing
           ? _c("div", [
-              _c("div", { staticClass: "form-group" }, [
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.body,
-                      expression: "body"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { id: "reply-body", name: "reply-body" },
-                  domProps: { value: _vm.body },
+              _c(
+                "form",
+                {
                   on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.body = $event.target.value
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.submitUpdate($event)
                     }
                   }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary btn-xs",
-                    on: { click: _vm.submitUpdate }
-                  },
-                  [_vm._v("\n                    Update\n                ")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-link btn-xs",
-                    on: {
-                      click: function($event) {
-                        _vm.editing = false
+                },
+                [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.body,
+                          expression: "body"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "reply-body",
+                        required: "",
+                        name: "reply-body"
+                      },
+                      domProps: { value: _vm.body },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.body = $event.target.value
+                        }
                       }
-                    }
-                  },
-                  [_vm._v("\n                    Cancel\n                ")]
-                )
-              ])
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary btn-xs",
+                        attrs: { type: "submit" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                        Update\n                    "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-link btn-xs",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.editing = false
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                        Cancel\n                    "
+                        )
+                      ]
+                    )
+                  ])
+                ]
+              )
             ])
           : _c("div", [
               _vm._v("\n            " + _vm._s(_vm.body) + "\n        ")

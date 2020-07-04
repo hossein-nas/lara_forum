@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\RecordsActivity;
 use App\ThreadSubscription;
 use App\Events\ThreadHasNewReply;
+use App\Events\ThreadReceivedNewReply;
 use App\Notifications\ThreadWasUpdated;
 use Illuminate\Database\Eloquent\Model;
 
@@ -61,23 +62,10 @@ class Thread extends Model
     public function addReply($reply)
     {
         $reply = $this->replies()->create($reply);
-
-        $this->notifySubscribers($reply);
-        // event(new ThreadHasNewReply($this, $reply));
+        event(new ThreadReceivedNewReply($reply));
 
         return $reply;
     }
-
-    
-    public function notifySubscribers(Reply $reply)
-    {
-        $this->subscriptions
-            ->where('user_id', '!=', $reply->user_id)
-            ->each(function($sub) use ($reply){
-                $sub->user->notify(new ThreadWasUpdated($this, $reply));
-            });
-    }
-    
 
     public function channel()
     {

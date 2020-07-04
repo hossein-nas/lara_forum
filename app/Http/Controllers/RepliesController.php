@@ -25,22 +25,10 @@ class RepliesController extends Controller
 
 	public function store($channelId, Thread $thread, CreatePostRequest $form)
 	{
-		$reply = $thread->addReply([
+		return $thread->addReply([
 			'user_id'		=> auth()->id(),
 			'body' 			=> request('body')
-		]);
-
-		preg_match_all('/\@([^\s\.]+)/i', $reply->body, $matches);
-		$names = $matches[1];
-
-		foreach($names as $name){
-			$user = User::whereName($name)->first();
-			if($user){
-				$user->notify(new YouWereMentioned($reply));
-			}
-		}
-
-		return $reply->load('owner');
+		])->load('owner');
 	}
 	
 	public function destory(Reply $reply)

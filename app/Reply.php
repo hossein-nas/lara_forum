@@ -53,4 +53,11 @@ class Reply extends Model
         return "{$this->thread->path()}#reply-no-{$this->id}";
     }
 
+    public function mentionedUsers()
+    {
+        preg_match_all('/\@([^\s\.]+)/i', $this->body, $matches);
+        
+        return $matches[1];
+    }
+    
 }

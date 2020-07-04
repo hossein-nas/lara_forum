@@ -47,17 +47,26 @@ class Reply extends Model
         return $this->created_at->gt(Carbon::now()->subMinute());    
     }
     
+    public function mentionedUsers()
+    {
+        preg_match_all('/\@([\w\-]+)/i', $this->body, $matches);
+        
+        return $matches[1];
+    }
 
     public function path()
     {
         return "{$this->thread->path()}#reply-no-{$this->id}";
     }
 
-    public function mentionedUsers()
+    public function setBodyAttribute($body)
     {
-        preg_match_all('/\@([^\s\.]+)/i', $this->body, $matches);
-        
-        return $matches[1];
+        // Hey @JaneDoe
+        // Hey <a href="/profiles/JaneDoe">JaneDoe</a>
+        $this->attributes['body'] = preg_replace(
+            '/@([\w\-]+)/',
+            "<a href=\"/profiles/$1\">$0</a>",
+            $body
+        );
     }
-    
 }

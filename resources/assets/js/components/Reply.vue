@@ -37,8 +37,7 @@
                     </div>
                 </form>
             </div>
-            <div v-else>
-                {{ body }}
+            <div v-else v-html="body">
             </div>
         </div>
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Reply;
 use Exception;
 use App\Thread;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\CreatePostRequest;
 
 class RepliesController extends Controller
 {
@@ -19,24 +21,12 @@ class RepliesController extends Controller
 		return $thread->replies()->paginate(5);			
 	}
 
-	public function store($channelId, Thread $thread)
+	public function store($channelId, Thread $thread, CreatePostRequest $form)
 	{
-		try{
-			$this->authorize('create', new Reply);
-			$this->validate(request(), ['body' => 'required|spamfree']);
-
-			$reply = $thread->addReply([
-				'user_id'		=> auth()->id(),
-				'body' 			=> request('body')
-			]);
-		}catch(Exception $e){
-			return response(
-				'Sorry, your reply could not be saved at this time.',
-				 422
-			);	
-		}
-
-		return $reply->load('owner');
+		return $thread->addReply([
+			'user_id'		=> auth()->id(),
+			'body' 			=> request('body')
+		])->load('owner');
 	}
 	
 	public function destory(Reply $reply)

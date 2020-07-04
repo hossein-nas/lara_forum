@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Reply;
 use Exception;
 use App\Thread;
 use Illuminate\Support\Facades\Gate;
+use App\Notifications\YouWereMentioned;
 use App\Http\Requests\CreatePostRequest;
 
 class RepliesController extends Controller
@@ -23,10 +25,22 @@ class RepliesController extends Controller
 
 	public function store($channelId, Thread $thread, CreatePostRequest $form)
 	{
-		return $thread->addReply([
+		$reply = $thread->addReply([
 			'user_id'		=> auth()->id(),
 			'body' 			=> request('body')
-		])->load('owner');
+		]);
+
+		preg_match_all('/\@([^\s\.]+)/i', $reply->body, $matches);
+		$names = $matches[1];
+
+		foreach($names as $name){
+			$user = User::whereName($name)->first();
+			if($user){
+				$user->notify(new YouWereMentioned($reply));
+			}
+		}
+
+		return $reply->load('owner');
 	}
 	
 	public function destory(Reply $reply)

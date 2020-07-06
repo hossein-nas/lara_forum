@@ -31,7 +31,7 @@ class MentionUsersTest extends TestCase
     }
 
     /** @test */
-    public function it_can_fetch_all_mentioned_users_starting_with_then_given_characters()
+    public function it_can_fetch_all_mentioned_users_starting_with_that_given_characters()
     {
         create(User::class, ['name' => 'johndoe']);
         create(User::class, ['name' => 'johndoe2']);

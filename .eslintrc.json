@@ -34,7 +34,8 @@
                 "max" : 1,
                 "allowFirstLine": true
             }
-        }]
+        }],
+        "prefer-const": "off"
     }
 }
     

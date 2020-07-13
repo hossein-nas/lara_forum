@@ -8,11 +8,6 @@ use App\Http\Controllers\Controller;
 class UserAvatarController extends Controller
 {
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');    
-    // }
-
     public function store()
     {
         $this->validate(request(), [
@@ -22,6 +17,10 @@ class UserAvatarController extends Controller
         auth()->user()->update([
             'avatar_path' => request()->file('avatar')->store('avatars', 'public'),
         ]);
+
+        if( request()->expectsJson() ){
+            return response([], 204);
+        }
 
         return back();
     }

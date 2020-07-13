@@ -6,29 +6,7 @@
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
 				<div class="page-header">
-
-					<div>
-						<h2>
-							{{ $profileUser->name }} <br>
-						</h2>
-						Since {{ $profileUser->created_at->diffForHumans() }}
-					</div>
-
-					@can('update', $profileUser)
-						<form action="{{ route('avatar', $profileUser) }}" method="POST" enctype="multipart/form-data">
-							{{  csrf_field() }}	
-							<div class="form-group">
-								<label for="avatarPhoto">Select Avatar</label>
-								<input type="file" name="avatar" id="avatar">
-							</div>
-
-							<div class="form-group">
-								<button type="submit" class="btn btn-primary btn-small">Add Avatar</button>
-							</div>
-						</form>
-					@endcan
-
-					<img src="{{ asset($profileUser->avatar()) }}" alt="" width="200">
+					<avatar-form :user="{{ $profileUser }}"></avatar-form>
 				</div>
 				
 				@forelse( $activities as  $date => $values)

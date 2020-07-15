@@ -2,21 +2,23 @@
 
 namespace App;
 
-use App\User;
-use App\Reply;
-use App\Thread;
-use Carbon\Carbon;
-use App\RecordsActivity;
-use App\ThreadSubscription;
 use App\Events\ThreadHasNewReply;
 use App\Events\ThreadReceivedNewReply;
 use App\Notifications\ThreadWasUpdated;
+use App\RecordVisits;
+use App\RecordsActivity;
+use App\Reply;
+use App\Thread;
+use App\ThreadSubscription;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Redis;
 
 class Thread extends Model
 {
 
-    use RecordsActivity;
+    use RecordsActivity, RecordVisits;
 
     protected $guarded = [];
 

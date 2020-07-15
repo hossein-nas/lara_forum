@@ -2,12 +2,13 @@
 
 namespace Tests\Unit;
 
-use App\User;
-use App\Thread;
-use Tests\TestCase;
 use App\Notifications\ThreadWasUpdated;
-use Illuminate\Support\Facades\Notification;
+use App\Thread;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Redis;
+use Tests\TestCase;
 
 class ThreadTest extends TestCase
 {
@@ -19,12 +20,11 @@ class ThreadTest extends TestCase
     {
         parent::setUp();
 
-        $this->thread = factory(Thread::class)->create();    
+        $this->thread = factory(Thread::class)->create();
     }
-    
 
     /** @test */
-    function a_thread_has_replies()
+    public function a_thread_has_replies()
     {
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->thread->replies);
     }
@@ -32,13 +32,12 @@ class ThreadTest extends TestCase
     /** @test */
     public function a_thread_has_creator()
     {
-    	$this->assertInstanceOf(User::class, $this->thread->creator);
+        $this->assertInstanceOf(User::class, $this->thread->creator);
     }
 
     /** @test */
     public function a_thread_can_add_a_reply()
     {
-
         $this->thread->addReply([
             'body'      => 'foobar',
             'user_id'   => 1
@@ -78,10 +77,9 @@ class ThreadTest extends TestCase
         $thread = create(Thread::class);
 
         $this->assertEquals(
-            "/threads/{$thread->channel->slug}/{$thread->id}", 
+            "/threads/{$thread->channel->slug}/{$thread->id}",
             $thread->path()
         );
-        
     }
 
     /** @test */
@@ -107,5 +105,19 @@ class ThreadTest extends TestCase
 
         $this->assertCount(0, $thread->subscriptions);
     }
-    
+
+    /** @test */
+    public function a_thread_records_each_visit()
+    {
+        $thread = make(Thread::class, ['id' => 1]);
+        
+        $thread->resetVisits();
+        $this->assertSame(0, $thread->visits());
+
+        $thread->recordVisit();
+        $this->assertEquals(1, $thread->visits());
+
+        $thread->recordVisit();
+        $this->assertEquals(2, $thread->visits());
+    }
 }

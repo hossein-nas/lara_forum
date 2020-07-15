@@ -8,3 +8,5 @@ Homestead.json
 Homestead.yaml
 .env
 .phpintel
+/**/.php_cs*
+composer.lock

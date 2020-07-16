@@ -8,22 +8,18 @@ use App\Thread;
 use App\Trending;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
 
-class ThreadsController extends Controller
-{
-    public function __construct()
-    {
+class ThreadsController extends Controller {
+    public function __construct() {
         $this->middleware('auth')->except(['index', 'show']);
     }
-    
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
-    {
+    public function index(Channel $channel, ThreadFilters $filters, Trending $trending) {
         $threads = $this->getThreads($channel, $filters);
 
         if (request()->wantsJson()) {
@@ -41,8 +37,7 @@ class ThreadsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         return view('threads.create');
     }
 
@@ -52,19 +47,19 @@ class ThreadsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+
         $this->validate($request, [
-            'title'             => 'required|spamfree',
-            'body'              => 'required|spamfree',
-            'channel_id'        => 'required|exists:channels,id',
+            'title' => 'required|spamfree',
+            'body' => 'required|spamfree',
+            'channel_id' => 'required|exists:channels,id',
         ]);
-        
+
         $thread = Thread::create([
-            'user_id'       => auth()->id(),
-            'channel_id'    => $request->get('channel_id'),
-            'title'         => $request->get('title'),
-            'body'          => $request->get('body')
+            'user_id' => auth()->id(),
+            'channel_id' => $request->get('channel_id'),
+            'title' => $request->get('title'),
+            'body' => $request->get('body'),
         ]);
 
         return redirect($thread->path())
@@ -77,8 +72,7 @@ class ThreadsController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show($channelId, Thread $thread, Trending $trending)
-    {
+    public function show($channelId, Thread $thread, Trending $trending) {
         if (auth()->check()) {
             auth()->user()->read($thread);
         }
@@ -86,7 +80,7 @@ class ThreadsController extends Controller
         $trending->push($thread);
 
         $thread->visits()->record();
-        
+
         return view('threads.show', compact('thread'));
     }
 
@@ -96,7 +90,7 @@ class ThreadsController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response / public function edit(Thread $thread)
     {
-        //
+    //
     }
 
     /**
@@ -106,8 +100,7 @@ class ThreadsController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Thread $thread)
-    {
+    public function update(Request $request, Thread $thread) {
         //
     }
 
@@ -117,8 +110,7 @@ class ThreadsController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function destroy($channel, Thread $thread)
-    {
+    public function destroy($channel, Thread $thread) {
         $this->authorize('update', $thread);
 
         $thread->delete();
@@ -130,8 +122,7 @@ class ThreadsController extends Controller
         return redirect('/threads/');
     }
 
-    protected function getThreads($channel, $filters)
-    {
+    protected function getThreads($channel, $filters) {
         $threads = Thread::latest();
 
         if ($channel->exists) {

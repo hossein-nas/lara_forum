@@ -3301,7 +3301,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      body: "",
+      body: this.message,
       level: "success",
       show: false
     };
@@ -3314,15 +3314,24 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    if (this.message) this.flash(this.message);
+    if (this.message) {
+      this.flash({
+        message: this.message,
+        level: "danger"
+      });
+    }
+
     window.events.$on("flash", function (data) {
       _this.flash(data);
     });
   },
   methods: {
     flash: function flash(data) {
-      this.body = data.message;
-      this.level = data.level;
+      if (data) {
+        this.body = data.message;
+        this.level = data.level;
+      }
+
       this.show = true;
       this.hide();
     },
@@ -53772,8 +53781,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/hosseinnas/code/Forum/resources/assets/js/app.js */"./resources/assets/js/app.js");
-module.exports = __webpack_require__(/*! /home/hosseinnas/code/Forum/resources/assets/sass/app.scss */"./resources/assets/sass/app.scss");
+__webpack_require__(/*! /Users/hosseinnasiri/Sites/Forum/resources/assets/js/app.js */"./resources/assets/js/app.js");
+module.exports = __webpack_require__(/*! /Users/hosseinnasiri/Sites/Forum/resources/assets/sass/app.scss */"./resources/assets/sass/app.scss");
 
 
 /***/ })

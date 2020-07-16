@@ -5,117 +5,125 @@ namespace Tests\Feature;
 use App\Reply;
 use App\Channel;
 use App\Activity;
-use App\Thread; use App\User; use Illuminate\Foundation\Testing\DatabaseMigrations; use Tests\TestCase;
+use App\Thread;
+use App\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 
 class CreateThreadsTest extends TestCase
 {
-	use DatabaseMigrations;
- 	/** @test */
-	public function guests_may_not_create_threads()
-	{
-		$this->withExceptionHandling();
+    use DatabaseMigrations;
+    /** @test */
+    public function guests_may_not_create_threads()
+    {
+        $this->withExceptionHandling();
 
-		$this->post('/threads', [])
-			->assertRedirect('/login');
+        $this->post('/threads', [])
+            ->assertRedirect('/login');
 
-		$this->get('/threads/create')
-			->assertRedirect('/login');
-	}
+        $this->get('/threads/create')
+            ->assertRedirect('/login');
+    }
 
-	/** @test */
-	public function an_authenticated_user_can_create_form_threads()
-	{
-		$this->signIn();
+    /** @test */
+    public function authenticated_user_must_first_confirm_their_email_address_before_creating_threads()
+    {
+        $this->publishThread()
+            ->assertRedirect('/threads')
+            ->assertSessionHas('flash');
+    }
 
-		$thread = make(Thread::class);
+    /** @test */
+    public function an_authenticated_user_can_create_form_threads()
+    {
+        $this->signIn();
 
-		$response = $this->post('threads', $thread->toArray() );
+        $thread = make(Thread::class);
 
-		$this->get($response->headers->get('Location'))
-			->assertSee($thread->title)
-			->assertSee($thread->body);
-	}
+        $response = $this->post('threads', $thread->toArray());
 
-	/** @test */
-	public function a_thread_requires_a_title()
-	{
-		$this->publishThread(['title' => null])
-			->assertSessionHasErrors('title');
-	}
+        $this->get($response->headers->get('Location'))
+            ->assertSee($thread->title)
+            ->assertSee($thread->body);
+    }
 
-	/** @test */
-	public function a_thread_requires_a_body()
-	{
-		$this->publishThread(['body' => null])
-			->assertSessionHasErrors('body');
-	}
+    /** @test */
+    public function a_thread_requires_a_title()
+    {
+        $this->publishThread(['title' => null])
+            ->assertSessionHasErrors('title');
+    }
 
-	/** @test */
-	public function a_thread_requires_a_channel_id()
-	{
-		$this->publishThread(['channel_id' => null])
-			->assertSessionHasErrors('channel_id');
-	}
+    /** @test */
+    public function a_thread_requires_a_body()
+    {
+        $this->publishThread(['body' => null])
+            ->assertSessionHasErrors('body');
+    }
 
-	/** @test */
-	public function a_thread_requires_a_valid_channel_id()
-	{
-		factory(Channel::class, 2)->create();
+    /** @test */
+    public function a_thread_requires_a_channel_id()
+    {
+        $this->publishThread(['channel_id' => null])
+            ->assertSessionHasErrors('channel_id');
+    }
 
-		$this->assertCount(2, Channel::all());
+    /** @test */
+    public function a_thread_requires_a_valid_channel_id()
+    {
+        factory(Channel::class, 2)->create();
 
-		$this->publishThread(['channel_id' => 3])
-			->assertSessionHasErrors('channel_id');
-	}
+        $this->assertCount(2, Channel::all());
 
-	public function publishThread($overrides = [])
-	{
-		$this->withExceptionHandling()
-			->signIn();
+        $this->publishThread(['channel_id' => 3])
+            ->assertSessionHasErrors('channel_id');
+    }
 
-		$thread = make(Thread::class, $overrides);
+    public function publishThread($overrides = [])
+    {
+        $this->withExceptionHandling()
+            ->signIn();
 
-		return $this->post('/threads', $thread->toArray());
-	}
+        $thread = make(Thread::class, $overrides);
 
-	/** @test */
-	public function authorized_users_can_delete_threads()
-	{
-		$this->signIn();
+        return $this->post('/threads', $thread->toArray());
+    }
 
-		$thread = create(Thread::class, ['user_id' => auth()->id()]);
-		$reply = create(Reply::class, ['thread_id' => $thread->id]);
-		$reply->favorite();
-		
-		$response = $this->json('DELETE', $thread->path() );
+    /** @test */
+    public function authorized_users_can_delete_threads()
+    {
+        $this->signIn();
 
-		$response->assertStatus(204);
+        $thread = create(Thread::class, ['user_id' => auth()->id()]);
+        $reply = create(Reply::class, ['thread_id' => $thread->id]);
+        $reply->favorite();
+        
+        $response = $this->json('DELETE', $thread->path());
 
-		$this->assertDatabaseMissing('threads', ['id' => $thread->id] );
-		$this->assertDatabaseMissing('replies', ['id' => $reply->id]);
-		$this->assertEquals(0, Activity::count());
+        $response->assertStatus(204);
 
-	}
+        $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+        $this->assertEquals(0, Activity::count());
+    }
 
-	/** @test */
-	public function guests_cannot_delete_threads()
-	{
-		$this->withExceptionHandling();
+    /** @test */
+    public function guests_cannot_delete_threads()
+    {
+        $this->withExceptionHandling();
 
-		$thread = create(Thread::class);
-		
-		$this->delete($thread->path() )->assertRedirect('/login');
+        $thread = create(Thread::class);
+        
+        $this->delete($thread->path())->assertRedirect('/login');
 
-		$this->signIn();
+        $this->signIn();
 
-		$this->delete( $thread->path() )->assertStatus(403);
-
-	}
-	
-	/** @test */
-	public function threads_may_only_be_deleted_by_those_who_have_permission()
-	{
-		// TODO:
-	}
-
+        $this->delete($thread->path())->assertStatus(403);
+    }
+    
+    /** @test */
+    public function threads_may_only_be_deleted_by_those_who_have_permission()
+    {
+        // TODO:
+    }
 }

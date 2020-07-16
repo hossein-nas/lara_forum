@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'avatar_path',
+        'name', 'email', 'password', 'avatar_path', 'confirmed',
     ];
 
     /**
@@ -33,7 +33,7 @@ class User extends Authenticatable
 
     public function getRouteKeyName()
     {
-        return 'name';    
+        return 'name';
     }
 
     public function threads()
@@ -64,7 +64,6 @@ class User extends Authenticatable
 
     public function getAvatarPathAttribute($avatar)
     {
-        return asset( $avatar ?: '/avatars/default.png' );
+        return asset($avatar ?: '/avatars/default.png');
     }
-    
 }

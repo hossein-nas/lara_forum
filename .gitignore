@@ -10,3 +10,4 @@ Homestead.yaml
 .phpintel
 /**/.php_cs*
 composer.lock
+package-lock.json

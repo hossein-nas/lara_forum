@@ -36,7 +36,7 @@
             <div class="body">{{ $thread->body }}</div>
         </div>
         <div class="panel-footer">
-            <strong>{{ $thread->visits() }}</strong>
+            <strong>{{ $thread->visits()->count() }}</strong>
             Visits
         </div><!-- /.panel-footer -->
     </div>

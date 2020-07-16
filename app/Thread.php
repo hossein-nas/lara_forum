@@ -2,23 +2,23 @@
 
 namespace App;
 
-use App\Events\ThreadHasNewReply;
-use App\Events\ThreadReceivedNewReply;
-use App\Notifications\ThreadWasUpdated;
-use App\RecordVisits;
-use App\RecordsActivity;
+use App\User;
 use App\Reply;
 use App\Thread;
-use App\ThreadSubscription;
-use App\User;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
+use App\RecordsActivity;
+use App\Utilities\Visits;
+use App\ThreadSubscription;
+use App\Events\ThreadHasNewReply;
 use Illuminate\Support\Facades\Redis;
+use App\Events\ThreadReceivedNewReply;
+use App\Notifications\ThreadWasUpdated;
+use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
 
-    use RecordsActivity, RecordVisits;
+    use RecordsActivity;
 
     protected $guarded = [];
 
@@ -120,4 +120,8 @@ class Thread extends Model
         return $this->updated_at > cache($key);
     }
 
+    public function visits()
+    {
+        return new Visits($this);
+    }
 }

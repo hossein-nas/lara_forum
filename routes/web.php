@@ -9,7 +9,7 @@
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return view('welcome');
@@ -42,8 +42,7 @@ Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
 Route::delete('profiles/{user}/notifications/{notification}', 'UsersNotificationsController@destroy');
 Route::get('profiles/{user}/notifications/', 'UsersNotificationsController@index');
 
+Route::get('/register/confirm', 'Api\RegisterConfirmationController@index');
 
 Route::get('/api/users', 'Api\UsersController@index');
 Route::post('/api/users/{user}/avatar', 'Api\UserAvatarController@store')->middleware('auth')->name('avatar');
-
-

@@ -18,23 +18,29 @@ class CreateThreadsTest extends TestCase
     {
         $this->withExceptionHandling();
 
-        $this->post('/threads', [])
-            ->assertRedirect('/login');
+        $this->post(route('threads'), [])
+            ->assertRedirect(route('login'));
 
         $this->get('/threads/create')
-            ->assertRedirect('/login');
+            ->assertRedirect(route('login'));
     }
 
     /** @test */
-    public function authenticated_user_must_first_confirm_their_email_address_before_creating_threads()
+    public function new_user_must_first_confirm_their_email_address_before_creating_threads()
     {
-        $this->publishThread()
-            ->assertRedirect('/threads')
+        $user = factory(User::class)->states('unconfirmed')->create();
+
+        $this->signIn($user);
+
+        $thread = make(Thread::class);
+
+        $this->post(route('threads'), $thread->toArray())
+            ->assertRedirect(route('threads'))
             ->assertSessionHas('flash');
     }
 
     /** @test */
-    public function an_authenticated_user_can_create_form_threads()
+    public function a_user_can_create_form_threads()
     {
         $this->signIn();
 
@@ -86,7 +92,7 @@ class CreateThreadsTest extends TestCase
 
         $thread = make(Thread::class, $overrides);
 
-        return $this->post('/threads', $thread->toArray());
+        return $this->post(route('threads'), $thread->toArray());
     }
 
     /** @test */
@@ -114,7 +120,7 @@ class CreateThreadsTest extends TestCase
 
         $thread = create(Thread::class);
         
-        $this->delete($thread->path())->assertRedirect('/login');
+        $this->delete($thread->path())->assertRedirect(route('login'));
 
         $this->signIn();
 

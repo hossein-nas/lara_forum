@@ -6,7 +6,7 @@ use App\Reply;
 use App\Channel;
 use App\Activity;
 use App\Thread;
-use App\User;
+
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 

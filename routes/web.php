@@ -42,7 +42,7 @@ Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
 Route::delete('profiles/{user}/notifications/{notification}', 'UsersNotificationsController@destroy');
 Route::get('profiles/{user}/notifications/', 'UsersNotificationsController@index');
 
-Route::get('/register/confirm', 'Api\RegisterConfirmationController@index')->name('register.confirm');
+Route::get('/register/confirm', 'Auth\RegisterConfirmationController@index')->name('register.confirm');
 
 Route::get('/api/users', 'Api\UsersController@index');
 Route::post('/api/users/{user}/avatar', 'Api\UserAvatarController@store')->middleware('auth')->name('avatar');

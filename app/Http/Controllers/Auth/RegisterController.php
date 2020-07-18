@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Mail\PleaseConfirmYourEmail;
+use App\User;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -21,7 +21,7 @@ class RegisterController extends Controller
     | validation and creation. By default this controller uses a trait to
     | provide this functionality without requiring any additional code.
     |
-    */
+     */
 
     use RegistersUsers;
 
@@ -69,7 +69,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'confirmation_token' => str_random(25),
+            'confirmation_token' => str_limit(md5($data['email'] . str_random()), 25, ''),
         ]);
     }
 
@@ -83,7 +83,7 @@ class RegisterController extends Controller
     protected function registered(Request $request, $user)
     {
         Mail::to($user)->send(new PleaseConfirmYourEmail($user));
-        
-        return redirect($this->redirectPath()); 
+
+        return redirect($this->redirectPath());
     }
 }

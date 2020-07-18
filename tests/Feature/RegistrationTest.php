@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Mail\PleaseConfirmYourEmail;
 use App\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
@@ -62,5 +61,4 @@ class RegistrationTest extends TestCase
             ->assertRedirect(route('threads'))
             ->assertSessionHas('flash', 'Unkown token.');
     }
-    
 }

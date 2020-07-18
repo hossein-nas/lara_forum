@@ -1,22 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\User;
 
 class RegisterConfirmationController extends Controller
 {
-
     public function index()
     {
-
-        try{
+        try {
             User::where('confirmation_token', request('token'))
                 ->firstOrFail()
                 ->confirm();
-        }
-        catch(\Exception $e){
+        } catch (\Exception $e) {
             return redirect(route('threads'))
                 ->with('flash', 'Unkown token.');
         }

@@ -2,11 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Reply;
-use App\Channel;
 use App\Activity;
+use App\Channel;
+use App\Reply;
 use App\Thread;
-
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -28,7 +27,7 @@ class CreateThreadsTest extends TestCase
     /** @test */
     public function new_user_must_first_confirm_their_email_address_before_creating_threads()
     {
-        $user = factory(User::class)->states('unconfirmed')->create();
+        $user = factory(\App\User::class)->states('unconfirmed')->create();
 
         $this->signIn($user);
 
@@ -46,7 +45,8 @@ class CreateThreadsTest extends TestCase
 
         $thread = make(Thread::class);
 
-        $response = $this->post('threads', $thread->toArray());
+        $response = $this->post(route('threads'), $thread->toArray());
+        // dd($response->headers->get('Location'));
 
         $this->get($response->headers->get('Location'))
             ->assertSee($thread->title)
@@ -103,7 +103,7 @@ class CreateThreadsTest extends TestCase
         $thread = create(Thread::class, ['user_id' => auth()->id()]);
         $reply = create(Reply::class, ['thread_id' => $thread->id]);
         $reply->favorite();
-        
+
         $response = $this->json('DELETE', $thread->path());
 
         $response->assertStatus(204);
@@ -119,14 +119,14 @@ class CreateThreadsTest extends TestCase
         $this->withExceptionHandling();
 
         $thread = create(Thread::class);
-        
+
         $this->delete($thread->path())->assertRedirect(route('login'));
 
         $this->signIn();
 
         $this->delete($thread->path())->assertStatus(403);
     }
-    
+
     /** @test */
     public function threads_may_only_be_deleted_by_those_who_have_permission()
     {

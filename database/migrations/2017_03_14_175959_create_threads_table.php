@@ -20,6 +20,7 @@ class CreateThreadsTable extends Migration
             $table->unsignedInteger('replies_count')->default(0);
             $table->string('title');
             $table->text('body');
+            $table->string('slug')->unique()->nullable();
             $table->timestamps();
         });
     }

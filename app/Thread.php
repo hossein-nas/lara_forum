@@ -2,17 +2,13 @@
 
 namespace App;
 
-use App\User;
+use App\Events\ThreadReceivedNewReply;
+use App\RecordsActivity;
 use App\Reply;
 use App\Thread;
-use Carbon\Carbon;
-use App\RecordsActivity;
-use App\Utilities\Visits;
 use App\ThreadSubscription;
-use App\Events\ThreadHasNewReply;
-use Illuminate\Support\Facades\Redis;
-use App\Events\ThreadReceivedNewReply;
-use App\Notifications\ThreadWasUpdated;
+use App\User;
+use App\Utilities\Visits;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
@@ -33,8 +29,8 @@ class Thread extends Model
         //     $builder->withCount('replies');
         // });
 
-        static::deleting(function($thread){
-            $thread->replies->each(function($reply){
+        static::deleting(function ($thread) {
+            $thread->replies->each(function ($reply) {
                 $reply->delete();
             });
         });
@@ -43,12 +39,12 @@ class Thread extends Model
 
     /**
      * generating thread own path
-     * 
+     *
      * @return string
      */
     public function path()
     {
-        return "/threads/{$this->channel->slug}/{$this->id}";
+        return "/threads/{$this->channel->slug}/{$this->slug}";
     }
 
     public function replies()
@@ -58,7 +54,7 @@ class Thread extends Model
 
     public function creator()
     {
-        return $this->belongsTo(User::class, 'user_id');    
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function addReply($reply)
@@ -71,7 +67,7 @@ class Thread extends Model
 
     public function channel()
     {
-        return $this->belongsTo(Channel::class);    
+        return $this->belongsTo(Channel::class);
     }
 
     public function scopeFilter($query, $filters)
@@ -82,7 +78,7 @@ class Thread extends Model
     public function subscribe($userId = null)
     {
         $this->subscriptions()->create([
-            'user_id' => $userId ?: auth()->id()
+            'user_id' => $userId ?: auth()->id(),
         ]);
 
         return $this;
@@ -98,11 +94,10 @@ class Thread extends Model
             ->where('user_id', $userId ?: auth()->id())
             ->delete();
     }
-    
-    
+
     public function subscriptions()
     {
-        return $this->hasMany(ThreadSubscription::class);    
+        return $this->hasMany(ThreadSubscription::class);
     }
 
     public function getIsSubscribedToAttribute()
@@ -123,5 +118,10 @@ class Thread extends Model
     public function visits()
     {
         return new Visits($this);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }

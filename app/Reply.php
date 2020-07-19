@@ -2,35 +2,32 @@
 
 namespace App;
 
-use App\Thread;
-use App\Favorite;
-use Carbon\Carbon;
 use App\RecordsActivity;
+use App\Thread;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-	use Favoritable, RecordsActivity;
+    use Favoritable, RecordsActivity;
 
-	protected $guarded = [];
+    protected $guarded = [];
 
-	protected $with = ['owner', 'favorites'];
+    protected $with = ['owner', 'favorites'];
 
     protected $appends = ['favorites_count', 'favorited_by_me'];
 
-    
     public static function boot()
     {
         parent::boot();
 
-        static::created(function($reply){
+        static::created(function ($reply) {
             $reply->thread->increment('replies_count');
         });
-        static::deleted(function($reply){
+        static::deleted(function ($reply) {
             $reply->thread->decrement('replies_count');
         });
     }
-    
 
     public function owner()
     {
@@ -39,18 +36,18 @@ class Reply extends Model
 
     public function thread()
     {
-    	return $this->belongsTo(Thread::class);	
+        return $this->belongsTo(Thread::class);
     }
 
     public function wasJustPublished()
     {
-        return $this->created_at->gt(Carbon::now()->subMinute());    
+        return $this->created_at->gt(Carbon::now()->subMinute());
     }
-    
+
     public function mentionedUsers()
     {
         preg_match_all('/\@([\w\-]+)/i', $this->body, $matches);
-        
+
         return $matches[1];
     }
 
@@ -68,5 +65,10 @@ class Reply extends Model
             "<a href=\"/profiles/$1\">$0</a>",
             $body
         );
+    }
+
+    public function isBest()
+    {
+        return $this->thread->best_reply_id == $this->id;
     }
 }

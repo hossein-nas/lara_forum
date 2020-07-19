@@ -25,6 +25,7 @@ Route::post('/threads', 'ThreadsController@store')->middleware('must-be-confirme
 Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
 Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy');
 
+
 // subscriptions
 Route::post('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store');
 Route::delete('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy');
@@ -36,6 +37,7 @@ Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
 Route::delete('/replies/{reply}/favorites', 'FavoritesController@destroy');
 Route::delete('/replies/{reply}', 'RepliesController@destory');
 Route::patch('/replies/{reply}', 'RepliesController@update');
+Route::post('/replies/{reply}/best', 'BestRepliesController@store')->name('best-replies.store');
 
 Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
 

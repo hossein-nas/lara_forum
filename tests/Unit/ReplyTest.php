@@ -4,15 +4,15 @@ namespace Tests\Unit;
 
 use App\Reply;
 use Carbon\Carbon;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 
 class ReplyTest extends TestCase
 {
     use DatabaseMigrations;
 
     /** @test */
-    function it_has_an_owner()
+    public function it_has_an_owner()
     {
         $reply = factory('App\Reply')->create();
 
@@ -51,5 +51,13 @@ class ReplyTest extends TestCase
             'Hello <a href="/profiles/Jane-Doe">@Jane-Doe</a>.',
             $reply->body
         );
+    }
+    /** @test */
+    public function it_knows_if_it_is_the_best_reply()
+    {
+        $reply = create(Reply::class);
+
+        $this->assertFalse($reply->isBest());
+        $this->assertFalse(false);
     }
 }

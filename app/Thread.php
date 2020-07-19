@@ -25,23 +25,21 @@ class Thread extends Model
     {
         parent::boot();
 
-        // static::addGlobalScope('replyCount', function($builder){
-        //     $builder->withCount('replies');
-        // });
-
         static::deleting(function ($thread) {
             $thread->replies->each(function ($reply) {
                 $reply->delete();
             });
         });
 
+        static::created(function ($thread) {
+            $thread->update(['slug' => $thread->title]);
+        });
     }
 
     /**
      * generating thread own path
      *
-     * @return string
-     */
+     * @return string */
     public function path()
     {
         return "/threads/{$this->channel->slug}/{$this->slug}";
@@ -128,22 +126,11 @@ class Thread extends Model
     public function setSlugAttribute($value)
     {
         $slug = str_slug($value);
+
         if (static::whereSlug($slug)->exists()) {
-            $slug = $this->incrementSlug($slug);
+            $slug = "{$slug}-{$this->id}";
         }
+
         $this->attributes['slug'] = $slug;
-    }
-
-    protected function incrementSlug($slug)
-    {
-        $max = static::whereTitle($this->title)->latest('id')->value('slug');
-
-        if (is_numeric($max[-1])) {
-            return preg_replace_callback('/(\d+)$/', function($matches){
-                return $matches[1] + 1;
-            }, $max);
-        }
-
-        return "{$slug}-2";
     }
 }

@@ -17,11 +17,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
+
+// threads related
 Route::get('/home', 'HomeController@index');
 Route::get('/threads', 'ThreadsController@index')->name('threads');
 Route::get('/threads/create', 'ThreadsController@create');
 Route::get('/threads/{channel}', 'ThreadsController@index');
 Route::post('/threads', 'ThreadsController@store')->middleware('must-be-confirmed');
+Route::post('/threads/{thread}/lock', "LockThreadsController@store")->name('lock-threads.store')->middleware('admin');
 Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
 Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy');
 

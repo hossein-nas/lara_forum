@@ -2,12 +2,12 @@
 
 namespace App;
 
+use App\Activity;
 use App\Reply;
 use App\Thread;
-use App\Activity;
 use Carbon\Carbon;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -49,12 +49,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Activity::class)->latest();
     }
-    
+
     public function visitedThreadCacheKey(Thread $thread)
     {
         return sprintf('users.%s.visits.%s', $this->id, $thread->id);
     }
-    
+
     public function read(Thread $thread)
     {
         $key = $this->visitedThreadCacheKey($thread);
@@ -71,11 +71,16 @@ class User extends Authenticatable
         return asset($avatar ?: '/avatars/default.png');
     }
 
-    public function confirm ()
+    public function confirm()
     {
         $this->confirmed = true;
         $this->confirmation_token = null;
 
         $this->save();
+    }
+
+    public function isAdmin()
+    {
+        return in_array($this->name, ['JohnDoe', 'JaneDoe']);
     }
 }

@@ -4,11 +4,18 @@ require("bootstrap-sass")
 
 window.Vue = require("vue")
 
-Vue.prototype.authorize = function (handler) {
-    const user = window.App.user
+let authorizations = require("./authorizations")
+Vue.prototype.authorize = function (...params) {
+    let user = window.App.user
+    if (!user) return false
 
-    return user ? handler(user) : false
+    if (typeof params[0] === "string") {
+        return authorizations[params[0]](params[1])
+    }
+
+    return params[0](user)
 }
+Vue.prototype.signedIn = window.App.signedIn
 
 window.axios = require("axios")
 window.axios.defaults.headers.common = {

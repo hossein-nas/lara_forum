@@ -43,12 +43,7 @@ export default {
     computed: {
         endpoint () {
             return location.pathname + "/replies"
-        },
-
-        signedIn () {
-            return window.App.signedIn
         }
-
     },
 
     mounted () {

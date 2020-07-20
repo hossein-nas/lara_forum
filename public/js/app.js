@@ -3449,9 +3449,6 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     endpoint: function endpoint() {
       return location.pathname + "/replies";
-    },
-    signedIn: function signedIn() {
-      return window.App.signedIn;
     }
   },
   mounted: function mounted() {
@@ -3722,6 +3719,7 @@ __webpack_require__.r(__webpack_exports__);
       data: this.attributes,
       editing: false,
       body: this.attributes.body,
+      reply: this.attributes,
       isBest: false
     };
   },
@@ -3731,26 +3729,16 @@ __webpack_require__.r(__webpack_exports__);
     },
     reply_id: function reply_id() {
       return ["reply-no-", this.data.id].join("");
-    },
-    signedIn: function signedIn() {
-      return window.App.signedIn;
-    },
-    canUpdate: function canUpdate() {
-      var _this = this;
-
-      return this.authorize(function (user) {
-        return _this.data.user_id === user.id;
-      });
     }
   },
   methods: {
     submitUpdate: function submitUpdate() {
-      var _this2 = this;
+      var _this = this;
 
       axios.patch("/replies/" + this.attributes.id, {
         body: this.body
       }).then(function () {
-        _this2.postSubmit();
+        _this.postSubmit();
       })["catch"](function (error) {
         flash(error.response.data, "danger");
       });
@@ -3760,10 +3748,10 @@ __webpack_require__.r(__webpack_exports__);
       flash("Your Reply has been updated");
     },
     destroy: function destroy() {
-      var _this3 = this;
+      var _this2 = this;
 
       axios["delete"]("/replies/" + this.attributes.id).then(function () {
-        _this3.$emit("deleted", _this3.data.id);
+        _this2.$emit("deleted", _this2.data.id);
       });
     },
     markBestReply: function markBestReply() {
@@ -40655,7 +40643,7 @@ var render = function() {
       _vm._v(" "),
       !_vm.editing
         ? _c("div", { staticClass: "panel-footer level" }, [
-            _vm.canUpdate
+            _vm.authorize("updateReply", _vm.reply)
               ? _c("div", [
                   _c(
                     "button",
@@ -52976,6 +52964,22 @@ var app = new Vue({
 
 /***/ }),
 
+/***/ "./resources/assets/js/authorizations.js":
+/*!***********************************************!*\
+  !*** ./resources/assets/js/authorizations.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var user = window.App.user;
+module.exports = {
+  updateReply: function updateReply(reply) {
+    return user.id === reply.user_id;
+  }
+};
+
+/***/ }),
+
 /***/ "./resources/assets/js/bootstrap.js":
 /*!******************************************!*\
   !*** ./resources/assets/js/bootstrap.js ***!
@@ -52989,11 +52993,24 @@ __webpack_require__(/*! bootstrap-sass */ "./node_modules/bootstrap-sass/assets/
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
-Vue.prototype.authorize = function (handler) {
+var authorizations = __webpack_require__(/*! ./authorizations */ "./resources/assets/js/authorizations.js");
+
+Vue.prototype.authorize = function () {
   var user = window.App.user;
-  return user ? handler(user) : false;
+  if (!user) return false;
+
+  for (var _len = arguments.length, params = new Array(_len), _key = 0; _key < _len; _key++) {
+    params[_key] = arguments[_key];
+  }
+
+  if (typeof params[0] === "string") {
+    return authorizations[params[0]](params[1]);
+  }
+
+  return params[0](user);
 };
 
+Vue.prototype.signedIn = window.App.signedIn;
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common = {
   "X-CSRF-TOKEN": window.App.csrfToken,

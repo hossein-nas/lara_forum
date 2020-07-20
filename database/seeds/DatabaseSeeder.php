@@ -13,5 +13,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(creatingThreadsSeeder::class);
         $this->call(ResetRedisSeeder::class);
+        $this->call(ClearingCacheSeeder::class);
     }
 }

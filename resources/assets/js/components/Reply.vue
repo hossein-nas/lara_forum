@@ -45,7 +45,7 @@
         </div>
 
         <div v-if="!editing" class="panel-footer level">
-            <div v-if="canUpdate">
+            <div v-if="authorize('updateReply', reply)">
                 <button class="btn btn-xs mr-1" @click="editing = !editing ">
                     Edit
                 </button>
@@ -86,6 +86,7 @@ export default {
             data: this.attributes,
             editing: false,
             body: this.attributes.body,
+            reply: this.attributes,
             isBest: false
         }
     },
@@ -97,14 +98,6 @@ export default {
 
         reply_id () {
             return ["reply-no-", this.data.id].join("")
-        },
-
-        signedIn () {
-            return window.App.signedIn
-        },
-
-        canUpdate () {
-            return this.authorize(user => this.data.user_id === user.id)
         }
     },
 

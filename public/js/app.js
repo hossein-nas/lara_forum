@@ -3720,7 +3720,7 @@ __webpack_require__.r(__webpack_exports__);
       editing: false,
       body: this.attributes.body,
       reply: this.attributes,
-      isBest: false
+      isBest: this.attributes.isBest
     };
   },
   computed: {
@@ -3731,14 +3731,22 @@ __webpack_require__.r(__webpack_exports__);
       return ["reply-no-", this.data.id].join("");
     }
   },
+  created: function created() {
+    var _this = this;
+
+    window.events.$on("best-reply-selected", function (reply_id) {
+      console.log("here");
+      _this.isBest = _this.data.id === reply_id;
+    });
+  },
   methods: {
     submitUpdate: function submitUpdate() {
-      var _this = this;
+      var _this2 = this;
 
       axios.patch("/replies/" + this.attributes.id, {
         body: this.body
       }).then(function () {
-        _this.postSubmit();
+        _this2.postSubmit();
       })["catch"](function (error) {
         flash(error.response.data, "danger");
       });
@@ -3748,14 +3756,19 @@ __webpack_require__.r(__webpack_exports__);
       flash("Your Reply has been updated");
     },
     destroy: function destroy() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios["delete"]("/replies/" + this.attributes.id).then(function () {
-        _this2.$emit("deleted", _this2.data.id);
+        _this3.$emit("deleted", _this3.data.id);
       });
     },
     markBestReply: function markBestReply() {
-      this.isBest = true;
+      var _this4 = this;
+
+      axios.post("/replies/".concat(this.reply.id, "/best")).then(function () {
+        window.events.$emit("best-reply-selected", _this4.data.id);
+        flash("Selected best reply successfully", "success");
+      });
     }
   }
 });
@@ -53833,8 +53846,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/hosseinnas/code/Forum/resources/assets/js/app.js */"./resources/assets/js/app.js");
-module.exports = __webpack_require__(/*! /home/hosseinnas/code/Forum/resources/assets/sass/app.scss */"./resources/assets/sass/app.scss");
+__webpack_require__(/*! /Users/hosseinnasiri/Sites/Forum/resources/assets/js/app.js */"./resources/assets/js/app.js");
+module.exports = __webpack_require__(/*! /Users/hosseinnasiri/Sites/Forum/resources/assets/sass/app.scss */"./resources/assets/sass/app.scss");
 
 
 /***/ })

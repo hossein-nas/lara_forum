@@ -87,7 +87,7 @@ export default {
             editing: false,
             body: this.attributes.body,
             reply: this.attributes,
-            isBest: false
+            isBest: this.attributes.isBest
         }
     },
 
@@ -99,6 +99,13 @@ export default {
         reply_id () {
             return ["reply-no-", this.data.id].join("")
         }
+    },
+
+    created () {
+        window.events.$on("best-reply-selected", (reply_id) => {
+            console.log("here")
+            this.isBest = (this.data.id === reply_id)
+        })
     },
 
     methods: {
@@ -127,7 +134,12 @@ export default {
         },
 
         markBestReply () {
-            this.isBest = true
+            axios.post(`/replies/${this.reply.id}/best`)
+                .then(() => {
+                    window.events.$emit("best-reply-selected", this.data.id)
+
+                    flash("Selected best reply successfully", "success")
+                })
         }
     }
 

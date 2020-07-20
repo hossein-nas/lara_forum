@@ -3701,6 +3701,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3709,26 +3710,25 @@ __webpack_require__.r(__webpack_exports__);
     Favorite: _Favorite__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   props: {
-    attributes: {
+    reply: {
       type: Object,
       required: true
     }
   },
   data: function data() {
     return {
-      data: this.attributes,
+      id: this.reply.id,
       editing: false,
-      body: this.attributes.body,
-      reply: this.attributes,
-      isBest: this.attributes.isBest
+      body: this.reply.body,
+      isBest: this.reply.isBest
     };
   },
   computed: {
     ago: function ago() {
-      return moment__WEBPACK_IMPORTED_MODULE_1___default()(this.data.created_at).fromNow();
+      return moment__WEBPACK_IMPORTED_MODULE_1___default()(this.reply.created_at).fromNow();
     },
     reply_id: function reply_id() {
-      return ["reply-no-", this.data.id].join("");
+      return ["reply-no-", this.id].join("");
     }
   },
   created: function created() {
@@ -3736,14 +3736,14 @@ __webpack_require__.r(__webpack_exports__);
 
     window.events.$on("best-reply-selected", function (reply_id) {
       console.log("here");
-      _this.isBest = _this.data.id === reply_id;
+      _this.isBest = _this.id === reply_id;
     });
   },
   methods: {
     submitUpdate: function submitUpdate() {
       var _this2 = this;
 
-      axios.patch("/replies/" + this.attributes.id, {
+      axios.patch("/replies/" + this.id, {
         body: this.body
       }).then(function () {
         _this2.postSubmit();
@@ -3758,15 +3758,15 @@ __webpack_require__.r(__webpack_exports__);
     destroy: function destroy() {
       var _this3 = this;
 
-      axios["delete"]("/replies/" + this.attributes.id).then(function () {
-        _this3.$emit("deleted", _this3.data.id);
+      axios["delete"]("/replies/" + this.id).then(function () {
+        _this3.$emit("deleted", _this3.id);
       });
     },
     markBestReply: function markBestReply() {
       var _this4 = this;
 
-      axios.post("/replies/".concat(this.reply.id, "/best")).then(function () {
-        window.events.$emit("best-reply-selected", _this4.data.id);
+      axios.post("/replies/".concat(this.id, "/best")).then(function () {
+        window.events.$emit("best-reply-selected", _this4.id);
         flash("Selected best reply successfully", "success");
       });
     }
@@ -40498,7 +40498,7 @@ var render = function() {
           { key: reply.id },
           [
             _c("reply", {
-              attrs: { attributes: reply },
+              attrs: { reply: reply },
               on: {
                 deleted: function($event) {
                   return _vm.remove(index)
@@ -40554,8 +40554,8 @@ var render = function() {
         _c("div", { staticClass: "level" }, [
           _c("span", { staticClass: "flex" }, [
             _c("a", {
-              attrs: { href: "/profiles/" + _vm.data.owner.name },
-              domProps: { textContent: _vm._s(_vm.data.owner.name) }
+              attrs: { href: "/profiles/" + _vm.reply.owner.name },
+              domProps: { textContent: _vm._s(_vm.reply.owner.name) }
             }),
             _vm._v(" said "),
             _c("span", { domProps: { textContent: _vm._s(_vm.ago) } }),
@@ -40566,7 +40566,7 @@ var render = function() {
             "div",
             [
               _vm.signedIn
-                ? _c("favorite", { attrs: { reply: _vm.data } })
+                ? _c("favorite", { attrs: { reply: _vm.reply } })
                 : _vm._e()
             ],
             1
@@ -40654,9 +40654,11 @@ var render = function() {
           : _c("div", { domProps: { innerHTML: _vm._s(_vm.body) } })
       ]),
       _vm._v(" "),
-      !_vm.editing
+      !_vm.editing &&
+      (_vm.authorize("owns", _vm.reply) ||
+        _vm.authorize("owns", _vm.reply.thread))
         ? _c("div", { staticClass: "panel-footer level" }, [
-            _vm.authorize("updateReply", _vm.reply)
+            _vm.authorize("owns", _vm.reply)
               ? _c("div", [
                   _c(
                     "button",
@@ -40682,10 +40684,18 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
-            !_vm.isBest
+            _vm.authorize("owns", _vm.reply.thread)
               ? _c(
                   "button",
                   {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.isBest,
+                        expression: "! isBest"
+                      }
+                    ],
                     staticClass: "btn btn-default btn-xs ml-a",
                     on: { click: _vm.markBestReply }
                   },
@@ -52986,8 +52996,9 @@ var app = new Vue({
 
 var user = window.App.user;
 module.exports = {
-  updateReply: function updateReply(reply) {
-    return user.id === reply.user_id;
+  owns: function owns(model) {
+    var prop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "user_id";
+    return model[prop] === user.id;
   }
 };
 
@@ -53846,8 +53857,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/hosseinnasiri/Sites/Forum/resources/assets/js/app.js */"./resources/assets/js/app.js");
-module.exports = __webpack_require__(/*! /Users/hosseinnasiri/Sites/Forum/resources/assets/sass/app.scss */"./resources/assets/sass/app.scss");
+__webpack_require__(/*! /home/hosseinnas/code/Forum/resources/assets/js/app.js */"./resources/assets/js/app.js");
+module.exports = __webpack_require__(/*! /home/hosseinnas/code/Forum/resources/assets/sass/app.scss */"./resources/assets/sass/app.scss");
 
 
 /***/ })

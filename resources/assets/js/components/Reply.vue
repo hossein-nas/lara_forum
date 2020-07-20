@@ -6,12 +6,12 @@
         <div class="panel-heading">
             <div class="level">
                 <span class="flex">
-                    <a :href="'/profiles/' + data.owner.name" v-text="data.owner.name">
+                    <a :href="'/profiles/' + reply.owner.name" v-text="reply.owner.name">
                     </a> said <span v-text="ago"></span> ...
                 </span>
 
                 <div>
-                    <favorite v-if="signedIn" :reply="data"></favorite>
+                    <favorite v-if="signedIn" :reply="reply"></favorite>
                 </div>
             </div>
         </div>
@@ -44,8 +44,8 @@
             </div>
         </div>
 
-        <div v-if="!editing" class="panel-footer level">
-            <div v-if="authorize('updateReply', reply)">
+        <div v-if="!editing && ( authorize('owns', reply) || authorize('owns', reply.thread) )" class="panel-footer level">
+            <div v-if="authorize('owns', reply)">
                 <button class="btn btn-xs mr-1" @click="editing = !editing ">
                     Edit
                 </button>
@@ -54,7 +54,8 @@
                 </button>
             </div>
 
-            <button v-if="! isBest"
+            <button v-if="authorize('owns', reply.thread)"
+                    v-show="! isBest"
                     class="btn btn-default btn-xs ml-a"
                     @click="markBestReply"
             >
@@ -75,7 +76,7 @@ export default {
     },
 
     props: {
-        attributes: {
+        reply: {
             type: Object,
             required: true
         }
@@ -83,34 +84,33 @@ export default {
 
     data () {
         return {
-            data: this.attributes,
+            id: this.reply.id,
             editing: false,
-            body: this.attributes.body,
-            reply: this.attributes,
-            isBest: this.attributes.isBest
+            body: this.reply.body,
+            isBest: this.reply.isBest
         }
     },
 
     computed: {
         ago () {
-            return moment(this.data.created_at).fromNow()
+            return moment(this.reply.created_at).fromNow()
         },
 
         reply_id () {
-            return ["reply-no-", this.data.id].join("")
+            return ["reply-no-", this.id].join("")
         }
     },
 
     created () {
         window.events.$on("best-reply-selected", (reply_id) => {
             console.log("here")
-            this.isBest = (this.data.id === reply_id)
+            this.isBest = (this.id === reply_id)
         })
     },
 
     methods: {
         submitUpdate () {
-            axios.patch("/replies/" + this.attributes.id, {
+            axios.patch("/replies/" + this.id, {
                 body: this.body
             })
                 .then(() => {
@@ -127,16 +127,16 @@ export default {
         },
 
         destroy () {
-            axios.delete("/replies/" + this.attributes.id)
+            axios.delete("/replies/" + this.id)
                 .then(() => {
-                    this.$emit("deleted", this.data.id)
+                    this.$emit("deleted", this.id)
                 })
         },
 
         markBestReply () {
-            axios.post(`/replies/${this.reply.id}/best`)
+            axios.post(`/replies/${this.id}/best`)
                 .then(() => {
-                    window.events.$emit("best-reply-selected", this.data.id)
+                    window.events.$emit("best-reply-selected", this.id)
 
                     flash("Selected best reply successfully", "success")
                 })

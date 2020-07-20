@@ -1,5 +1,8 @@
 <template>
-    <div :id="reply_id" class="panel panel-default">
+    <div :id="reply_id"
+         class="panel "
+         :class=" (isBest? 'panel-success' : 'panel-default') "
+    >
         <div class="panel-heading">
             <div class="level">
                 <span class="flex">
@@ -41,12 +44,21 @@
             </div>
         </div>
 
-        <div v-if="!editing && canUpdate" class="panel-footer level">
-            <button class="btn btn-xs mr-1" @click="editing = !editing ">
-                Edit
-            </button>
-            <button class="btn btn-danger btn-xs mr-1" @click="destroy">
-                Delete
+        <div v-if="!editing" class="panel-footer level">
+            <div v-if="canUpdate">
+                <button class="btn btn-xs mr-1" @click="editing = !editing ">
+                    Edit
+                </button>
+                <button class="btn btn-danger btn-xs mr-1" @click="destroy">
+                    Delete
+                </button>
+            </div>
+
+            <button v-if="! isBest"
+                    class="btn btn-default btn-xs ml-a"
+                    @click="markBestReply"
+            >
+                Best Reply?
             </button>
         </div>
     </div>
@@ -73,7 +85,8 @@ export default {
         return {
             data: this.attributes,
             editing: false,
-            body: this.attributes.body
+            body: this.attributes.body,
+            isBest: false
         }
     },
 
@@ -118,6 +131,10 @@ export default {
                 .then(() => {
                     this.$emit("deleted", this.data.id)
                 })
+        },
+
+        markBestReply () {
+            this.isBest = true
         }
     }
 

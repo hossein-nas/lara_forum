@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Redis;
 
 class ResetRedisSeeder extends Seeder
 {
@@ -11,6 +12,6 @@ class ResetRedisSeeder extends Seeder
      */
     public function run()
     {
-        Redis::flushall();
+        Redis::flushDB();
     }
 }

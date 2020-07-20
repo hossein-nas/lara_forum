@@ -3692,6 +3692,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3709,7 +3721,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       data: this.attributes,
       editing: false,
-      body: this.attributes.body
+      body: this.attributes.body,
+      isBest: false
     };
   },
   computed: {
@@ -3752,6 +3765,9 @@ __webpack_require__.r(__webpack_exports__);
       axios["delete"]("/replies/" + this.attributes.id).then(function () {
         _this3.$emit("deleted", _this3.data.id);
       });
+    },
+    markBestReply: function markBestReply() {
+      this.isBest = true;
     }
   }
 });
@@ -40527,7 +40543,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "panel panel-default", attrs: { id: _vm.reply_id } },
+    {
+      staticClass: "panel ",
+      class: _vm.isBest ? "panel-success" : "panel-default",
+      attrs: { id: _vm.reply_id }
+    },
     [
       _c("div", { staticClass: "panel-heading" }, [
         _c("div", { staticClass: "level" }, [
@@ -40633,29 +40653,44 @@ var render = function() {
           : _c("div", { domProps: { innerHTML: _vm._s(_vm.body) } })
       ]),
       _vm._v(" "),
-      !_vm.editing && _vm.canUpdate
+      !_vm.editing
         ? _c("div", { staticClass: "panel-footer level" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-xs mr-1",
-                on: {
-                  click: function($event) {
-                    _vm.editing = !_vm.editing
-                  }
-                }
-              },
-              [_vm._v("\n            Edit\n        ")]
-            ),
+            _vm.canUpdate
+              ? _c("div", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-xs mr-1",
+                      on: {
+                        click: function($event) {
+                          _vm.editing = !_vm.editing
+                        }
+                      }
+                    },
+                    [_vm._v("\n                Edit\n            ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger btn-xs mr-1",
+                      on: { click: _vm.destroy }
+                    },
+                    [_vm._v("\n                Delete\n            ")]
+                  )
+                ])
+              : _vm._e(),
             _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-danger btn-xs mr-1",
-                on: { click: _vm.destroy }
-              },
-              [_vm._v("\n            Delete\n        ")]
-            )
+            !_vm.isBest
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-default btn-xs ml-a",
+                    on: { click: _vm.markBestReply }
+                  },
+                  [_vm._v("\n            Best Reply?\n        ")]
+                )
+              : _vm._e()
           ])
         : _vm._e()
     ]
@@ -53781,8 +53816,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/hosseinnasiri/Sites/Forum/resources/assets/js/app.js */"./resources/assets/js/app.js");
-module.exports = __webpack_require__(/*! /Users/hosseinnasiri/Sites/Forum/resources/assets/sass/app.scss */"./resources/assets/sass/app.scss");
+__webpack_require__(/*! /home/hosseinnas/code/Forum/resources/assets/js/app.js */"./resources/assets/js/app.js");
+module.exports = __webpack_require__(/*! /home/hosseinnas/code/Forum/resources/assets/sass/app.scss */"./resources/assets/sass/app.scss");
 
 
 /***/ })

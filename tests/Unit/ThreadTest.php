@@ -7,7 +7,6 @@ use App\Thread;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
 
 class ThreadTest extends TestCase
@@ -39,8 +38,8 @@ class ThreadTest extends TestCase
     public function a_thread_can_add_a_reply()
     {
         $this->thread->addReply([
-            'body'      => 'foobar',
-            'user_id'   => 1
+            'body' => 'foobar',
+            'user_id' => 1,
         ]);
 
         $this->assertCount(1, $this->thread->replies);
@@ -55,13 +54,12 @@ class ThreadTest extends TestCase
             ->thread
             ->subscribe()
             ->addReply([
-                'body'      => 'foobar',
-                'user_id'   => 999
+                'body' => 'foobar',
+                'user_id' => 999,
             ]);
 
         Notification::assertSentTo(auth()->user(), ThreadWasUpdated::class);
     }
-    
 
     /** @test */
     public function a_thread_belongs_to_channel()
@@ -110,7 +108,7 @@ class ThreadTest extends TestCase
     public function a_thread_records_each_visit()
     {
         $thread = make(Thread::class, ['id' => 1]);
-        
+
         $thread->visits()->reset();
         $this->assertSame(0, $thread->visits()->count());
 
@@ -119,5 +117,15 @@ class ThreadTest extends TestCase
 
         $thread->visits()->record();
         $this->assertEquals(2, $thread->visits()->count());
+    }
+
+    /** @test */
+    public function a_thread_may_be_locked()
+    {
+        $this->assertFalse(!!$this->thread->locked);
+
+        $this->thread->lock();
+
+        $this->assertTrue(!!$this->thread->fresh()->locked);
     }
 }

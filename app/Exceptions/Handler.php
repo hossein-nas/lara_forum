@@ -2,11 +2,12 @@
 
 namespace App\Exceptions;
 
-use Exception;
+use App\Exceptions\ThreadLockedException;
 use App\Exceptions\ThrottleException;
+use Exception;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -46,14 +47,18 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if( $exception instanceof ValidationException){
-            if( request()->expectsJson()){
+        if ($exception instanceof ValidationException) {
+            if (request()->expectsJson()) {
                 return response('Soryy, validation failed', 422);
             }
         }
 
-        if( $exception instanceof ThrottleException){
+        if ($exception instanceof ThrottleException) {
             return response('You are posting too frequently', 429);
+        }
+
+        if ($exception instanceof ThreadLockedException) {
+            return response('Thread is locked', 422);
         }
 
         return parent::render($request, $exception);

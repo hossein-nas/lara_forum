@@ -57,10 +57,19 @@ class Thread extends Model
 
     public function addReply($reply)
     {
+        if ($this->locked) {
+            throw new \App\Exceptions\ThreadLockedException();
+        }
+
         $reply = $this->replies()->create($reply);
         event(new ThreadReceivedNewReply($reply));
 
         return $reply;
+    }
+
+    public function lock()
+    {
+        $this->update(['locked' => true]);
     }
 
     public function channel()

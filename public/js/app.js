@@ -3936,7 +3936,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     toggleLock: function toggleLock() {
-      this.locked = !this.locked;
+      var _this = this;
+
+      axios[this.locked ? "delete" : "post"]("/threads/".concat(this.thread.slug, "/lock")).then(function (res) {
+        _this.locked = !_this.locked;
+        flash("The thread " + (_this.locked ? "Locked" : "Unlocked") + " Successfully.", _this.locked ? "danger" : "success");
+      });
     }
   }
 });

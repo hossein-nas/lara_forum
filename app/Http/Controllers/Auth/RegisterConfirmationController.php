@@ -10,9 +10,11 @@ class RegisterConfirmationController extends Controller
     public function index()
     {
         try {
-            User::where('confirmation_token', request('token'))
-                ->firstOrFail()
-                ->confirm();
+            $user = User::where('confirmation_token', request('token'))
+                ->firstOrFail();
+            $user->confirm();
+
+            auth()->login($user, true);
         } catch (\Exception $e) {
             return redirect(route('threads'))
                 ->with('flash', 'Unkown token.');

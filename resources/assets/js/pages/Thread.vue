@@ -30,7 +30,12 @@ export default {
 
     methods: {
         toggleLock () {
-            this.locked = !this.locked
+            axios[this.locked ? "delete" : "post"](`/threads/${this.thread.slug}/lock`)
+                .then((res) => {
+                    this.locked = !this.locked
+
+                    flash("The thread " + (this.locked ? "Locked" : "Unlocked") + " Successfully.", (this.locked ? "danger" : "success"))
+                })
         }
     }
 }

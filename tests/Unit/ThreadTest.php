@@ -124,7 +124,7 @@ class ThreadTest extends TestCase
     {
         $this->assertFalse(!!$this->thread->locked);
 
-        $this->thread->lock();
+        $this->thread->update(['locked' => true]);
 
         $this->assertTrue(!!$this->thread->fresh()->locked);
     }

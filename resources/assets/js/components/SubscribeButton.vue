@@ -1,6 +1,5 @@
 <template>
     <button :class="classes"
-            style="margin-top: 1.5rem"
             @click="subscribe"
             v-text="buttonText"
     >

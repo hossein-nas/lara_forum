@@ -4,7 +4,7 @@ require("bootstrap-sass")
 
 window.Vue = require("vue")
 
-let authorizations = require("./authorizations")
+let authorizations = require("./authorizations").default
 Vue.prototype.authorize = function (...params) {
     let user = window.App.user
     if (!user) return false

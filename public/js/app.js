@@ -3437,10 +3437,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "NewReply",
+  props: ["locked"],
   data: function data() {
     return {
       data: ""
@@ -3592,6 +3596,7 @@ __webpack_require__.r(__webpack_exports__);
     NewReply: _NewReply__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   mixins: [_mixins_collection__WEBPACK_IMPORTED_MODULE_2__["default"]],
+  props: ["locked"],
   data: function data() {
     return {
       dataSet: false,
@@ -3792,7 +3797,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SubscribeButton",
   props: ["active"],
@@ -3916,10 +3920,11 @@ __webpack_require__.r(__webpack_exports__);
     replies: _components_Replies_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     SubscribeButton: _components_SubscribeButton_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  props: ["initialRepliesCount"],
+  props: ["thread"],
   data: function data() {
     return {
-      replies_count: this.initialRepliesCount
+      replies_count: this.thread.replies_count,
+      locked: this.thread.locked
     };
   },
   computed: {
@@ -3927,6 +3932,11 @@ __webpack_require__.r(__webpack_exports__);
       var count = this.replies_count;
       var suffix = count === 0 || count > 1 ? "comments" : "comment";
       return [count, suffix].join(" ");
+    }
+  },
+  methods: {
+    toggleLock: function toggleLock() {
+      this.locked = !this.locked;
     }
   }
 });
@@ -40325,7 +40335,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.signedIn
+    _vm.signedIn && !_vm.locked
       ? _c("div", [
           _c("div", { staticClass: "form-group" }, [
             _c("textarea", {
@@ -40366,6 +40376,12 @@ var render = function() {
               on: { click: _vm.addReply }
             },
             [_vm._v("\n            POST\n        ")]
+          )
+        ])
+      : _vm.locked
+      ? _c("p", { staticClass: "text-center text-danger" }, [
+          _vm._v(
+            "\n        The thread is locked. You could not post anymore.\n    "
           )
         ])
       : _c("p", { staticClass: "text-center" }, [
@@ -40515,7 +40531,10 @@ var render = function() {
         on: { updated: _vm.fetch }
       }),
       _vm._v(" "),
-      _c("new-reply", { on: { created: _vm.add } })
+      _c("new-reply", {
+        attrs: { locked: _vm.locked },
+        on: { created: _vm.add }
+      })
     ],
     2
   )
@@ -40731,7 +40750,6 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("button", {
     class: _vm.classes,
-    staticStyle: { "margin-top": "1.5rem" },
     domProps: { textContent: _vm._s(_vm.buttonText) },
     on: { click: _vm.subscribe }
   })
@@ -52991,16 +53009,24 @@ var app = new Vue({
 /*!***********************************************!*\
   !*** ./resources/assets/js/authorizations.js ***!
   \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-var user = window.App.user;
-module.exports = {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+
+var user = window.App.user; // module.exports = {
+
+/* harmony default export */ __webpack_exports__["default"] = ({
   owns: function owns(model) {
     var prop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "user_id";
     return model[prop] === user.id;
+  },
+  isAdmin: function isAdmin() {
+    return ["JohnDoe", "JaneDoe"].includes(user.name);
   }
-};
+});
 
 /***/ }),
 
@@ -53017,7 +53043,7 @@ __webpack_require__(/*! bootstrap-sass */ "./node_modules/bootstrap-sass/assets/
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
-var authorizations = __webpack_require__(/*! ./authorizations */ "./resources/assets/js/authorizations.js");
+var authorizations = __webpack_require__(/*! ./authorizations */ "./resources/assets/js/authorizations.js")["default"];
 
 Vue.prototype.authorize = function () {
   var user = window.App.user;

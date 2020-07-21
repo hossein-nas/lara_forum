@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="signedIn">
+        <div v-if="signedIn && ! locked">
             <div class="form-group">
                 <textarea id="body"
                           v-model="data"
@@ -19,6 +19,9 @@
                 POST
             </button>
         </div>
+        <p v-else-if="locked" class="text-center text-danger">
+            The thread is locked. You could not post anymore.
+        </p>
         <p v-else class="text-center">
             Please
             <a href="/login">sign in</a>
@@ -33,6 +36,8 @@ import "at.js"
 
 export default {
     name: "NewReply",
+
+    props: ["locked"],
 
     data () {
         return {

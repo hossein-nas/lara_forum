@@ -10,11 +10,12 @@ export default {
         SubscribeButton
     },
 
-    props: ["initialRepliesCount"],
+    props: ["thread"],
 
     data () {
         return {
-            replies_count: this.initialRepliesCount
+            replies_count: this.thread.replies_count,
+            locked: this.thread.locked
         }
     },
 
@@ -25,8 +26,13 @@ export default {
 
             return [count, suffix].join(" ")
         }
-    }
+    },
 
+    methods: {
+        toggleLock () {
+            this.locked = !this.locked
+        }
+    }
 }
 </script>
 

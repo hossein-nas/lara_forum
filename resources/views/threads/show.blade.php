@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <thread-view inline-template :initial-replies-count="{{ $thread->replies_count }}">
+    <thread-view inline-template :thread="{{ $thread }}">
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
@@ -36,6 +36,7 @@
 
                     <replies @added="replies_count++"
                              @removed="replies_count--"
+                             :locked="locked"
                         >
                             
                     </replies>
@@ -50,8 +51,14 @@
                             <strong>By :</strong> <a href="/user/JohnDoe">{{ $thread->creator->name }}</a> <br/>
                             Currently has <strong v-text="repliesCount"></strong>
                             
-                            <div>
-                                <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button>
+                            <div class="mt-1">
+                                <subscribe-button v-show="signedIn" :active="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button>
+                                <button class="btn " 
+                                        :class="locked ? 'btn-success' : 'btn-danger'"
+                                        v-if="authorize('isAdmin')" 
+                                        @click="toggleLock" 
+                                        v-text="locked? 'Unlock' : 'Lock' "
+                                ></button>
                             </div>
                         </div>
 

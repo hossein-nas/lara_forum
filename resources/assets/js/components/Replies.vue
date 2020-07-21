@@ -6,7 +6,7 @@
 
         <paginator :data-set="dataSet" @updated="fetch"></paginator>
 
-        <new-reply @created="add"></new-reply>
+        <new-reply :locked="locked" @created="add"></new-reply>
     </div>
 </template>
 
@@ -24,6 +24,8 @@ export default {
     },
 
     mixins: [collection],
+
+    props: ["locked"],
 
     data () {
         return {

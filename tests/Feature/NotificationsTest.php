@@ -35,8 +35,7 @@ class NotificationsTest extends TestCase {use DatabaseMigrations; public functio
         create(DatabaseNotification::class);
 
         $response = $this->getJson("/profiles/{$user->name}/notifications")->json();
-
-        // $this->assertCoun
+        $this->assertCount(1, $response);
     }
     
 

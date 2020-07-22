@@ -52,9 +52,9 @@ class ThreadsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Recaptcha $recaptcha)
+    public function store(Recaptcha $recaptcha)
     {
-        $this->validate($request, [
+        request()->validate([
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
             'channel_id' => 'required|exists:channels,id',
@@ -63,9 +63,9 @@ class ThreadsController extends Controller
 
         $thread = Thread::create([
             'user_id' => auth()->id(),
-            'channel_id' => $request->get('channel_id'),
-            'title' => $request->get('title'),
-            'body' => $request->get('body'),
+            'channel_id' => request()->get('channel_id'),
+            'title' => request()->get('title'),
+            'body' => request()->get('body'),
         ]);
 
         if (request()->wantsJson()) {

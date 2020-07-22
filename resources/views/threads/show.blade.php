@@ -9,36 +9,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div class="level">
-                                <img src="{{ $thread->creator->avatar_path }}" alt="{{ $thread->creator->name }}" height="25" class="mr-1">
-
-                                <span class="flex">
-                                    <a href="{{ route('profile', $thread->creator->name) }}">{{ $thread->creator->name }} </a> posted:: 
-                                    {{ $thread->title }}
-                                </span>
-                                @can('update', $thread)
-                                    <form action="{{ $thread->path() }}" method="POST">
-                                        {{ csrf_field() }}
-                                        {{ method_field('DELETE') }}
-                                        <button type="submit" class="btn btn-danger">DELETE Thread</button>
-                                    </form>
-                                @endcan
-                            </div>
-        
-                        </div>
-        
-                        <div class="panel-body">
-                            {{ $thread->body }}
-                        </div>
-                    </div>
+                    @include('threads._question') 
 
                     <replies @added="replies_count++"
                              @removed="replies_count--"
                              :locked="locked"
                         >
-                            
                     </replies>
 
                 </div>

@@ -15,7 +15,12 @@ export default {
     data () {
         return {
             replies_count: this.thread.replies_count,
-            locked: this.thread.locked
+            locked: this.thread.locked,
+            editing: false,
+            form: {
+                title: this.thread.title,
+                body: this.thread.body
+            }
         }
     },
 
@@ -30,11 +35,38 @@ export default {
 
     methods: {
         toggleLock () {
-            axios[this.locked ? "delete" : "post"](`/threads/${this.thread.slug}/lock`)
+            let uri = `/threads/${this.thread.slug}/lock`
+            axios[this.locked ? "delete" : "post"](uri)
                 .then((res) => {
                     this.locked = !this.locked
 
-                    flash("The thread " + (this.locked ? "Locked" : "Unlocked") + " Successfully.", (this.locked ? "danger" : "success"))
+                    flash(
+                        "The thread " + (this.locked ? "Locked" : "Unlocked") +
+                        " Successfully.", (this.locked ? "danger" : "success")
+                    )
+                })
+        },
+
+        resetForm () {
+            this.editing = false
+
+            this.form = {
+                title: this.thread.title,
+                body: this.thread.body
+            }
+        },
+
+        stopEditing () {
+            this.editing = false
+        },
+
+        update () {
+            let uri = `/threads/${this.thread.channel.slug}/${this.thread.slug}`
+            axios.patch(uri, this.form)
+                .then(() => {
+                    this.stopEditing()
+
+                    flash("Your thread has been updated.")
                 })
         }
     }

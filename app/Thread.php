@@ -10,11 +10,12 @@ use App\ThreadSubscription;
 use App\User;
 use App\Utilities\Visits;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Thread extends Model
 {
 
-    use RecordsActivity;
+    use RecordsActivity, Searchable;
 
     protected $guarded = [];
 

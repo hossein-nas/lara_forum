@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1014f671c7e2f67b43a60c3e4ce5aa16",
+    "content-hash": "9f5e2be5f919f5c219e3f757ca636f35",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -846,39 +846,39 @@
         },
         {
             "name": "laravel/scout",
-            "version": "v3.0.14",
+            "version": "v7.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/scout.git",
-                "reference": "154beb9255cef7e341c5838824ed1234e71e194d"
+                "reference": "733f334cc2487c6ac85a557ae5eefd29f6bb1ba3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/scout/zipball/154beb9255cef7e341c5838824ed1234e71e194d",
-                "reference": "154beb9255cef7e341c5838824ed1234e71e194d",
+                "url": "https://api.github.com/repos/laravel/scout/zipball/733f334cc2487c6ac85a557ae5eefd29f6bb1ba3",
+                "reference": "733f334cc2487c6ac85a557ae5eefd29f6bb1ba3",
                 "shasum": ""
             },
             "require": {
-                "illuminate/bus": "~5.4",
-                "illuminate/contracts": "~5.4",
-                "illuminate/database": "~5.4",
-                "illuminate/pagination": "~5.4",
-                "illuminate/queue": "~5.4",
-                "illuminate/support": "~5.4",
-                "php": ">=5.6.4"
+                "illuminate/bus": "~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "illuminate/contracts": "~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "illuminate/database": "~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "illuminate/pagination": "~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "illuminate/queue": "~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "illuminate/support": "~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "php": "^7.1.3"
             },
             "require-dev": {
-                "algolia/algoliasearch-client-php": "^1.10",
-                "mockery/mockery": "~0.9",
-                "phpunit/phpunit": "~5.0"
+                "algolia/algoliasearch-client-php": "^2.2",
+                "mockery/mockery": "^1.0",
+                "phpunit/phpunit": "^6.0|^7.0|^8.0"
             },
             "suggest": {
-                "algolia/algoliasearch-client-php": "Required to use the Algolia engine (^1.10)."
+                "algolia/algoliasearch-client-php": "Required to use the Algolia engine (^2.2)."
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "7.0-dev"
                 },
                 "laravel": {
                     "providers": [
@@ -907,7 +907,7 @@
                 "laravel",
                 "search"
             ],
-            "time": "2018-01-26T22:15:03+00:00"
+            "time": "2019-09-24T21:06:28+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -3553,6 +3553,143 @@
                 }
             ],
             "time": "2020-05-23T12:00:17+00:00"
+        },
+        {
+            "name": "teamtnt/laravel-scout-tntsearch-driver",
+            "version": "v9.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/teamtnt/laravel-scout-tntsearch-driver.git",
+                "reference": "15497138d2cf454b2f7f92716a89e366c864e0f5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/teamtnt/laravel-scout-tntsearch-driver/zipball/15497138d2cf454b2f7f92716a89e366c864e0f5",
+                "reference": "15497138d2cf454b2f7f92716a89e366c864e0f5",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/bus": "~5.4|^6.0|^7.0",
+                "illuminate/contracts": "~5.4|^6.0|^7.0",
+                "illuminate/database": "~5.4|^6.0|^7.0",
+                "illuminate/pagination": "~5.4|^6.0|^7.0",
+                "illuminate/queue": "~5.4|^6.0|^7.0",
+                "illuminate/support": "~5.4|^6.0|^7.0",
+                "laravel/scout": "7.*|^8.0",
+                "php": ">=7.1",
+                "teamtnt/tntsearch": "2.*"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~5.0"
+            },
+            "suggest": {
+                "teamtnt/tntsearch": "Required to use the TNTSearch engine."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "TeamTNT\\Scout\\TNTSearchScoutServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "TeamTNT\\Scout\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "TNT Studio",
+                    "email": "info@tntstudio.hr"
+                }
+            ],
+            "description": "Driver for Laravel Scout search package based on https://github.com/teamtnt/tntsearch",
+            "keywords": [
+                "laravel",
+                "scout",
+                "search",
+                "tntsearch"
+            ],
+            "time": "2020-07-01T16:51:16+00:00"
+        },
+        {
+            "name": "teamtnt/tntsearch",
+            "version": "v2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/teamtnt/tntsearch.git",
+                "reference": "01bb54c35a0c47eb41b145f76c384ef83b5a5852"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/01bb54c35a0c47eb41b145f76c384ef83b5a5852",
+                "reference": "01bb54c35a0c47eb41b145f76c384ef83b5a5852",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "ext-pdo_sqlite": "*",
+                "ext-sqlite3": "*",
+                "php": "~7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TeamTNT\\TNTSearch\\": "src"
+                },
+                "files": [
+                    "helper/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nenad Tičarić",
+                    "email": "nticaric@gmail.com",
+                    "homepage": "http://www.tntstudio.us",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A fully featured full text search engine written in PHP",
+            "homepage": "https://github.com/teamtnt/tntsearch",
+            "keywords": [
+                "Fuzzy search",
+                "fulltext",
+                "geosearch",
+                "search",
+                "teamtnt",
+                "tntsearch"
+            ],
+            "funding": [
+                {
+                    "url": "https://ko-fi.com/nticaric",
+                    "type": "ko_fi"
+                },
+                {
+                    "url": "https://opencollective.com/tntsearch",
+                    "type": "open_collective"
+                },
+                {
+                    "url": "https://www.patreon.com/nticaric",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-04-03T10:22:24+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",

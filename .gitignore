@@ -12,3 +12,4 @@ Homestead.yaml
 composer.lock
 package-lock.json
 tags
+/storage/*.index

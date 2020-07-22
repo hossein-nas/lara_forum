@@ -17,9 +17,22 @@ class Thread extends Model
 
     use RecordsActivity, Searchable;
 
+    public $asYouType = false;
+
+    public function toSearchableArray()
+    {
+        $array = [
+            'id' => $this->id,
+            'title' => $this->title,
+            'body'  => $this->body,
+        ];
+
+        return $array;
+    }
+
     protected $guarded = [];
 
-    protected $with = ['creator', 'channel'];
+    protected $with    = ['creator', 'channel'];
     protected $appends = ['isSubscribedTo'];
 
     protected static function boot()
@@ -113,7 +126,7 @@ class Thread extends Model
     public function hasUpdatesFor($user = null)
     {
         $user = $user ?: auth()->user();
-        $key = $user->visitedThreadCacheKey($this);
+        $key  = $user->visitedThreadCacheKey($this);
 
         return $this->updated_at > cache($key);
     }

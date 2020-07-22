@@ -7,6 +7,7 @@ use App\Channel;
 use App\Reply;
 use App\Rules\Recaptcha;
 use App\Thread;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -181,10 +182,4 @@ class CreateThreadsTest extends TestCase
 
         $this->delete($thread->path())->assertStatus(403);
     }
-
-    // /** @test */
-    // public function threads_may_only_be_deleted_by_those_who_have_permission()
-    // {
-    //     // TODO:
-    // }
 }

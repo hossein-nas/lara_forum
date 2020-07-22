@@ -95,9 +95,16 @@ class ThreadsController extends Controller
         return view('threads.show', compact('thread'));
     }
 
-    public function update(Request $request, Thread $thread)
+    public function update(Channel $channel, Thread $thread)
     {
-        //
+        $this->authorize('update', $thread);
+
+        $data = request()->validate([
+            'title' => 'required|spamfree',
+            'body' => 'required|spamfree',
+        ]);
+
+        $thread->update($data);
     }
 
     /**

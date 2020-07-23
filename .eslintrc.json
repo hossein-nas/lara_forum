@@ -36,7 +36,8 @@
             }
         }],
         "prefer-const": "off",
-        "camelcase" : "off"
+        "camelcase" : "off",
+        "no-extra-boolean-cast": "off"
     }
 }
     

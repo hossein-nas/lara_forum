@@ -8,6 +8,7 @@ Vue.component(
     require("./components/UserNotifications.vue").default
 )
 Vue.component("avatar-form", require("./components/AvatarForm.vue").default)
+Vue.component("wysiwyg", require("./components/Wysiwyg.vue").default)
 
 // pages
 Vue.component("thread-view", require("./pages/Thread.vue").default)

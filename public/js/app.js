@@ -3432,14 +3432,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3702,11 +3694,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3724,6 +3711,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       id: this.reply.id,
       editing: false,
+      old: "",
       body: this.reply.body,
       isBest: this.reply.isBest
     };
@@ -3734,6 +3722,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     reply_id: function reply_id() {
       return ["reply-no-", this.id].join("");
+    }
+  },
+  watch: {
+    editing: function editing() {
+      this.old = this.body;
     }
   },
   created: function created() {
@@ -3774,6 +3767,10 @@ __webpack_require__.r(__webpack_exports__);
         window.events.$emit("best-reply-selected", _this4.id);
         flash("Selected best reply successfully", "success");
       });
+    },
+    cancel: function cancel() {
+      this.body = this.old;
+      this.editing = false;
     }
   }
 });
@@ -3925,13 +3922,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Wysiwyg",
-  props: ["name", "init", "value"],
+  props: ["name", "init", "value", "placeholder"],
   data: function data() {
     return {//
     };
+  },
+  watch: {
+    value: function value(_value) {
+      if (_value.length === 0) {
+        this.$refs.trix.value = "";
+      }
+    }
   },
   mounted: function mounted() {
     if (!!this.init) {
@@ -40519,36 +40527,23 @@ var render = function() {
   return _c("div", [
     _vm.signedIn && !_vm.locked
       ? _c("div", [
-          _c("div", { staticClass: "form-group" }, [
-            _c("textarea", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
+          _c(
+            "div",
+            { staticClass: "form-group" },
+            [
+              _c("wysiwyg", {
+                attrs: { placeholder: "Have Something to SAY?" },
+                model: {
                   value: _vm.data,
+                  callback: function($$v) {
+                    _vm.data = $$v
+                  },
                   expression: "data"
                 }
-              ],
-              staticClass: "form-control",
-              attrs: {
-                id: "body",
-                name: "body",
-                cols: "30",
-                rows: "5",
-                required: "",
-                placeholder: "Have something to say?"
-              },
-              domProps: { value: _vm.data },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.data = $event.target.value
-                }
-              }
-            })
-          ]),
+              })
+            ],
+            1
+          ),
           _vm._v(" "),
           _c(
             "button",
@@ -40789,33 +40784,22 @@ var render = function() {
                   }
                 },
                 [
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("textarea", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
+                  _c(
+                    "div",
+                    { staticClass: "form-group" },
+                    [
+                      _c("wysiwyg", {
+                        model: {
                           value: _vm.body,
+                          callback: function($$v) {
+                            _vm.body = $$v
+                          },
                           expression: "body"
                         }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        id: "reply-body",
-                        required: "",
-                        name: "reply-body"
-                      },
-                      domProps: { value: _vm.body },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.body = $event.target.value
-                        }
-                      }
-                    })
-                  ]),
+                      })
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
                   _c("div", { staticClass: "form-group" }, [
                     _c(
@@ -40836,11 +40820,7 @@ var render = function() {
                       {
                         staticClass: "btn btn-link btn-xs",
                         attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            _vm.editing = false
-                          }
-                        }
+                        on: { click: _vm.cancel }
                       },
                       [
                         _vm._v(
@@ -41029,7 +41009,8 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("trix-editor", {
-        attrs: { input: "trix" },
+        ref: "trix",
+        attrs: { input: "trix", placeholder: _vm.placeholder },
         on: { "trix-change": _vm.change }
       })
     ],

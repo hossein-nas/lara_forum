@@ -10,7 +10,7 @@
 			<div class="col-md-8 col-md-offset-2">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Create New Thread	
+						Create New Thread
 					</div>
 
 					<div class="panel-body">
@@ -26,7 +26,7 @@
 								<select name="channel_id" id="channel_id" class="form-control">
 									<option value="">-- SELECT ONE ITEM --</option>
 									@foreach($channels as $channel )
-										<option value="{{ $channel->id }}" 
+										<option value="{{ $channel->id }}"
 											{{ $channel->id == old('channel_id')? 'selected' : '' }}
 											>
 												{{ $channel->name }}
@@ -37,7 +37,6 @@
 
 							<div class="form-group">
 								<label for="body">Body: </label>
-								{{-- <textarea name="body" id="body" cols="30" rows="5" class="form-control">{{ old('body') }}</textarea> --}}
 								<wysiwyg name="body" init="{{ json_encode(old('body')) }}"></wysiwyg>
 							</div>
 
@@ -54,7 +53,7 @@
 							<div class="alert alert-danger">
 								@foreach( $errors->all() as $error )
 									<p>{{ $error }}</p>
-								@endforeach	
+								@endforeach
 							</div>
 						@endif
 

@@ -20,12 +20,7 @@
             <div v-if="editing">
                 <form @submit.prevent="submitUpdate">
                     <div class="form-group">
-                        <textarea id="reply-body"
-                                  v-model="body"
-                                  required
-                                  class="form-control"
-                                  name="reply-body"
-                        > </textarea>
+                        <wysiwyg v-model="body"></wysiwyg>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-primary btn-xs" type="submit">
@@ -33,7 +28,7 @@
                         </button>
                         <button type="button"
                                 class="btn btn-link btn-xs"
-                                @click="editing = false"
+                                @click="cancel"
                         >
                             Cancel
                         </button>
@@ -86,6 +81,7 @@ export default {
         return {
             id: this.reply.id,
             editing: false,
+            old: "",
             body: this.reply.body,
             isBest: this.reply.isBest
         }
@@ -98,6 +94,12 @@ export default {
 
         reply_id () {
             return ["reply-no-", this.id].join("")
+        }
+    },
+
+    watch: {
+        editing () {
+            this.old = this.body
         }
     },
 
@@ -140,6 +142,12 @@ export default {
 
                     flash("Selected best reply successfully", "success")
                 })
+        },
+
+        cancel () {
+            this.body = this.old
+
+            this.editing = false
         }
     }
 

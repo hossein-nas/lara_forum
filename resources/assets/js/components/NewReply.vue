@@ -2,15 +2,7 @@
     <div>
         <div v-if="signedIn && ! locked">
             <div class="form-group">
-                <textarea id="body"
-                          v-model="data"
-                          name="body"
-                          cols="30"
-                          rows="5"
-                          class="form-control"
-                          required
-                          placeholder="Have something to say?"
-                ></textarea>
+                <wysiwyg v-model="data" placeholder="Have Something to SAY?"></wysiwyg>
             </div>
             <button class="btn btn-default"
                     type="submit"

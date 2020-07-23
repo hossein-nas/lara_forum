@@ -7,7 +7,11 @@
                :name="name"
         >
 
-        <trix-editor input="trix" @trix-change="change"></trix-editor>
+        <trix-editor ref="trix"
+                     input="trix"
+                     :placeholder="placeholder"
+                     @trix-change="change"
+        ></trix-editor>
     </div>
 </template>
 
@@ -17,11 +21,24 @@ import Trix from "trix"
 export default {
     name: "Wysiwyg",
 
-    props: ["name", "init", "value"],
+    props: [
+        "name",
+        "init",
+        "value",
+        "placeholder"
+    ],
 
     data () {
         return {
             //
+        }
+    },
+
+    watch: {
+        value (value) {
+            if (value.length === 0) {
+                this.$refs.trix.value = ""
+            }
         }
     },
 
